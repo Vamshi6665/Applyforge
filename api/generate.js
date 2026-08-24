@@ -1,28 +1,41 @@
 import OpenAI from "openai";
-import { PROFILE, RULES, OUTPUT_CONTRACT } from "./_profile.js";
+import { buildSystem, OUTPUT_CONTRACT } from "./_profile.js";
 
-// Vercel serverless function. Key stays server-side via env var — never shipped
-// to the browser. Set OPENAI_API_KEY in your Vercel project settings.
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Use POST." });
-  }
-  const { jobDescription } = req.body || {};
-  if (!jobDescription || jobDescription.trim().length < 40) {
-    return res.status(400).json({ error: "Job description too short." });
-  }
+  if (req.method !== "POST") return res.status(405).json({ error: "Use POST." });
 
-  const system = `${PROFILE}\n\n${RULES}\n\n${OUTPUT_CONTRACT}`;
+  const { mode, jobDescription, sampleResume, sampleEmail, sampleLinkedin, current, instruction } = req.body || {};
+  const system = buildSystem(sampleResume, sampleEmail, sampleLinkedin);
+
   try {
+    let userContent;
+
+    if (mode === "revise") {
+      if (!current || !instruction) return res.status(400).json({ error: "Missing current outputs or instruction." });
+      userContent =
+        `Here are the CURRENT outputs as JSON:\n${JSON.stringify(current)}\n\n` +
+        `The candidate wants this change:\n"${instruction}"\n\n` +
+        `Apply the change. Keep everything else the same unless the change requires otherwise. ` +
+        `Keep the keyword analysis accurate. Return the FULL updated set as JSON in the same shape. ${OUTPUT_CONTRACT}`;
+    } else {
+      if (!jobDescription || jobDescription.trim().length < 40) return res.status(400).json({ error: "Job description too short." });
+      userContent =
+        `JOB DESCRIPTION:\n\n${jobDescription}\n\n` +
+        `Step 1: Extract the important keywords/skills/tools from this JD. Sort each into "have" (supported by his resume/profile), ` +
+        `"relevantMissing" (not present but adjacent and safe to bridge honestly), or "differentMissing" (genuinely outside his experience — do NOT add these anywhere).\n` +
+        `Step 2: Generate all outputs, weaving in the "have" and "relevantMissing" keywords naturally. Follow the email 3-paragraph structure and the LinkedIn template exactly.\n` +
+        `Return everything as JSON.`;
+    }
+
     const completion = await openai.chat.completions.create({
       model: "gpt-4o",
       temperature: 0.6,
       response_format: { type: "json_object" },
       messages: [
         { role: "system", content: system },
-        { role: "user", content: `JOB DESCRIPTION:\n\n${jobDescription}\n\nGenerate the tailored outputs now as JSON.` },
+        { role: "user", content: userContent },
       ],
     });
     const parsed = JSON.parse(completion.choices[0].message.content);
