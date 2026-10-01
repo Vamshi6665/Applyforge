@@ -1,20 +1,26 @@
 {
   "name": "applyforge",
-  "version": "1.0.0",
-  "description": "Job Application Copilot — paste a JD, get tailored email, LinkedIn message, resume bullets, cover letter, and follow-up, grounded in your real profile.",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Self-hostable AI copilot that turns a job description into tailored, honest application materials.",
+  "license": "MIT",
   "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+  "workspaces": [
+    "server",
+    "client"
+  ],
+  "engines": {
+    "node": ">=20"
   },
-  "dependencies": {
-    "openai": "^4.67.3",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+  "scripts": {
+    "dev": "concurrently -n server,client -c blue,magenta \"npm:dev -w server\" \"npm:dev -w client\"",
+    "build": "npm run build -w client",
+    "start": "NODE_ENV=production node server/src/index.js",
+    "test": "npm run test -w server && npm run test -w client",
+    "test:coverage": "npm run test:coverage -w server && npm run test:coverage -w client",
+    "lint": "npm run lint -w server && npm run lint -w client"
   },
   "devDependencies": {
-    "@vitejs/plugin-react": "^4.3.2",
-    "vite": "^5.4.8"
+    "concurrently": "^9.1.0"
   }
 }
