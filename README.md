@@ -10,6 +10,9 @@ Paste a job description. ApplyForge marks it up like a highlighter (skills you h
 
 | | |
 |---|---|
+| 🚀 **Welcome screen** | A clean product-style landing page: large headline, a live example window with an animated match dial, and a paste box that accepts paste, clipboard or a dropped .txt file. Uses the system typeface (SF Pro on Apple devices), light and dark. |
+| ⌨️ **Command menu** | Press Ctrl+K (Cmd+K on Mac) to write drafts, switch tone, add or remove drafts, open applications, change the model or theme. |
+| 🎯 **Match dial and writing progress** | The match score is a ring split into have, bridge and gap. While drafts are written you see each stage tick off. |
 | 🖍️ **Marked-up job post** | Every keyword is highlighted green (on your profile), yellow (bridged honestly through an adjacent skill, e.g. Airflow via Azure Data Factory) or pink (a real gap that is never claimed). Includes a 0 to 100 match score. Runs locally, costs zero tokens. |
 | ✍️ **Five draft types** | Recruiter email, LinkedIn note (300-character ring), resume bullets, cover letter, follow-up email. Pick only the ones you need. |
 | 🎚️ **Two tones** | Metrics first or Concise. The second tone is only written when you ask for it. |
@@ -60,7 +63,7 @@ npm run test:coverage
 ```
 
 - **Server (100 tests, Vitest + Supertest):** keyword analysis, role and company detection, JD compression, sanitizer, LRU cache, prompt builders, generate and chat services, every provider adapter (request shape, streaming, error mapping), the registry, and the full HTTP API including SSE streaming, validation, rate limiting and error handling.
-- **Client (42 tests, Vitest + Testing Library):** diff, highlighting, SSE client, storage and the main user flows: paste, highlight, generate, cache, edit, rewrite, undo, copy, tone switch, streaming chat with apply, dismiss and stop, errors, your own key, Ctrl+Enter, profile editing, tracker with follow-ups, new job, theme and mobile panes.
+- **Client (49 tests, Vitest + Testing Library):** diff, highlighting, SSE client, storage and the main user flows: welcome screen, clipboard paste, file drop, command menu, writing progress, paste, highlight, generate, cache, edit, rewrite, undo, copy, tone switch, streaming chat with apply, dismiss and stop, errors, your own key, Ctrl+Enter, profile editing, tracker with follow-ups, new job, theme and mobile panes.
 
 CI runs both suites and the build on Node 20 and 22.
 

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import Icon from './Icon.jsx';
+import ForgeProgress from './ForgeProgress.jsx';
 import { SECTIONS, TONES, LINKEDIN_LIMIT, sectionLabel } from '../lib/constants.js';
 import { copyText, fmtNum } from '../lib/format.js';
 
@@ -110,6 +111,8 @@ export default function DraftsPanel({
   lastRun,
   onSaveToTracker,
   notify,
+  modelLabel,
+  pendingCount,
 }) {
   const current = draftsByTone[tone] || {};
   const existing = SECTIONS.filter((s) => draftsByTone.metrics?.[s.id] || draftsByTone.concise?.[s.id]);
@@ -158,7 +161,8 @@ export default function DraftsPanel({
       </div>
 
       <div className="pane__scroll">
-        {!hasDrafts ? (
+        {generating === 'all' && <ForgeProgress count={pendingCount || count} modelLabel={modelLabel} />}
+        {generating === 'all' ? null : !hasDrafts ? (
           <div className="empty">
             {canGenerate ? (
               <p>

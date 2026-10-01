@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { segmentJd } from '../lib/highlight.js';
 import { fmtNum } from '../lib/format.js';
 import { SAMPLE_JD } from '../lib/sample.js';
+import ScoreDial from './ScoreDial.jsx';
 
 const BUCKET_TITLE = {
   have: 'On your profile',
@@ -112,13 +113,16 @@ export default function JobPanel({ jd, setJd, analysis, analyzing, role, company
             {kw && (
               <>
                 <div className="match" aria-live="polite">
-                  <div className="match__bar" role="img" aria-label={`Match score ${kw.score} out of 100`}>
-                    <span className="match__fill" style={{ width: `${kw.score}%` }} />
+                  <ScoreDial score={kw.score} have={kw.have.length} bridge={kw.bridge.length} gap={kw.gap.length} size={104} />
+                  <div className="match__text">
+                    <p className="match__headline">
+                      {kw.score >= 75 ? 'Strong fit' : kw.score >= 50 ? 'Good fit with bridges' : 'Stretch role'}
+                    </p>
+                    <p className="muted">
+                      {kw.have.length} have, {kw.bridge.length} bridge, {kw.gap.length} gap{kw.gap.length === 1 ? '' : 's'}
+                      {analyzing && ', updating…'}
+                    </p>
                   </div>
-                  <p>
-                    <strong data-testid="match-score">{kw.score}</strong> match
-                    {analyzing && <span className="muted"> updating…</span>}
-                  </p>
                 </div>
                 <KeywordGroup bucket="have" items={kw.have} label="You have" />
                 <KeywordGroup bucket="bridge" items={kw.bridge} label="Bridge honestly" />

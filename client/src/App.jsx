@@ -6,6 +6,9 @@ import SettingsDrawer from './components/SettingsDrawer.jsx';
 import ProfileDrawer from './components/ProfileDrawer.jsx';
 import TrackerDrawer from './components/TrackerDrawer.jsx';
 import Icon from './components/Icon.jsx';
+import Welcome from './components/Welcome.jsx';
+import CommandPalette from './components/CommandPalette.jsx';
+import { SAMPLE_JD } from './lib/sample.js';
 import { api, streamChat } from './lib/api.js';
 import { useDebounced, useLocalState } from './hooks/useLocalState.js';
 import { SECTIONS, sectionLabel } from './lib/constants.js';
@@ -37,6 +40,9 @@ export default function App() {
   const [edited, setEdited] = useLocalState('edited', { role: false, company: false });
   const [active, setActive] = useState('email');
   const [generating, setGenerating] = useState(null);
+  const [pendingCount, setPendingCount] = useState(0);
+  const [paletteOpen, setPaletteOpen] = useState(false);
+  const [started, setStarted] = useLocalState('started', false);
   const [lastRun, setLastRun] = useState(null);
   const [chats, setChats] = useState({});
   const [streaming, setStreaming] = useState(false);
@@ -138,6 +144,7 @@ export default function App() {
     async (sections, { fresh = false, busy = 'all', forTone = tone } = {}) => {
       if (!canGenerate || !sections.length) return;
       setGenerating(busy);
+      setPendingCount(sections.length);
       try {
         const r = await api.generate(
           {
@@ -173,6 +180,10 @@ export default function App() {
           cacheHits: s.cacheHits + (r.cached ? 1 : 0),
         }));
         setView('drafts');
+        if (busy === 'all') {
+          const n = Object.keys(r.drafts).length;
+          notify(`${n} draft${n === 1 ? '' : 's'} ready${r.cached ? ', reused from cache' : ''}`);
+        }
       } catch (e) {
         notify(e.message, 'error');
         if (e.code === 'missing_key' || e.code === 'invalid_key') setDrawer('settings');
@@ -193,6 +204,11 @@ export default function App() {
 
   useEffect(() => {
     const onKey = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        setPaletteOpen((o) => !o);
+        return;
+      }
       if ((e.ctrlKey || e.metaKey) && e.key === 'Enter' && !generating) {
         e.preventDefault();
         runGenerate(selected);
@@ -328,6 +344,7 @@ export default function App() {
   const removeApp = (id) => setApps((list) => list.filter((a) => a.id !== id));
   const openApp = (a) => {
     setJd(a.jd || '');
+    setStarted(true);
     setRoleState(a.role || '');
     setCompanyState(a.company || '');
     setEdited({ role: true, company: true });
@@ -341,6 +358,7 @@ export default function App() {
   const newJob = () => {
     if (streaming) onStop();
     setJd('');
+    setStarted(false);
     setDraftsByTone(EMPTY_DRAFTS);
     setChats({});
     setRoleState('');
@@ -350,15 +368,45 @@ export default function App() {
     setView('job');
   };
 
+  const showWelcome = !started && existingIds.length === 0;
+  const startWith = (text) => {
+    setJd(text);
+    setStarted(true);
+  };
+
+  const paletteActions = [
+    { id: 'write', label: `Write ${selected.length} selected draft${selected.length === 1 ? '' : 's'}`, icon: 'spark', keys: 'Ctrl Enter', run: () => runGenerate(selected), disabled: !canGenerate || !selected.length },
+    { id: 'sample', label: 'Load a sample job', icon: 'doc', run: () => startWith(SAMPLE_JD) },
+    { id: 'new', label: 'Start a new job', icon: 'plus', run: () => newJob(), disabled: !jd && !existingIds.length },
+    { id: 'track', label: 'Track this application', icon: 'list', run: () => onSaveToTracker(), disabled: !existingIds.length },
+    { id: 'apps', label: 'Open applications', icon: 'list', hint: dueCount ? `${dueCount} follow-up${dueCount > 1 ? 's' : ''} due` : '', run: () => setDrawer('tracker') },
+    { id: 'profile', label: 'Edit your profile', icon: 'user', run: () => setDrawer('profile'), disabled: !profile },
+    { id: 'model', label: 'Change model or API key', icon: 'gear', hint: modelLabel, run: () => setDrawer('settings') },
+    { id: 'tone', label: `Switch to ${tone === 'metrics' ? 'concise' : 'metrics first'} tone`, icon: 'edit', run: () => setTone(tone === 'metrics' ? 'concise' : 'metrics') },
+    ...SECTIONS.map((sec) => ({
+      id: `pick-${sec.id}`,
+      label: `${selected.includes(sec.id) ? 'Remove' : 'Add'} ${sec.label.toLowerCase().replace('linkedin', 'LinkedIn')}`,
+      icon: 'doc',
+      hint: 'Drafts to write',
+      run: () => toggleSection(sec.id),
+    })),
+    { id: 'theme', label: `Use ${theme === 'dark' ? 'light' : 'dark'} theme`, icon: 'moon', run: () => setTheme(theme === 'dark' ? 'light' : 'dark') },
+  ];
+
   const chatDisabled = !jd.trim() ? 'Paste a job posting first' : !selection ? 'Loading models…' : '';
 
   return (
-    <div className="app" data-view={view}>
+    <div className={`app ${showWelcome ? 'app--welcome' : ''}`} data-view={view}>
       <header className="topbar">
         <h1 className="wordmark">
           Apply<span>Forge</span>
         </h1>
         <nav className="topbar__actions" aria-label="App">
+          <button type="button" className="cmd-btn" onClick={() => setPaletteOpen(true)} aria-label="Open command menu">
+            <Icon name="spark" />
+            <span className="hide-sm">Commands</span>
+            <kbd className="hide-sm">Ctrl K</kbd>
+          </button>
           <button type="button" className="model-chip" onClick={() => setDrawer('settings')} title="Change model">
             <span className="model-chip__dot" aria-hidden="true" />
             {modelLabel}
@@ -386,6 +434,9 @@ export default function App() {
         </nav>
       </header>
 
+      {showWelcome ? (
+        <Welcome jd={jd} setJd={setJd} onStart={startWith} notify={notify} modelLabel={modelLabel} onOpenProfile={() => setDrawer('profile')} />
+      ) : (
       <main className="workspace">
         <JobPanel
           jd={jd}
@@ -415,6 +466,8 @@ export default function App() {
           lastRun={lastRun}
           onSaveToTracker={onSaveToTracker}
           notify={notify}
+          modelLabel={modelLabel}
+          pendingCount={pendingCount}
         />
         <ChatPanel
           scope={scope}
@@ -428,7 +481,9 @@ export default function App() {
           disabledReason={chatDisabled}
         />
       </main>
+      )}
 
+      {!showWelcome && (
       <nav className="mobile-nav" aria-label="Sections">
         {[
           ['job', 'doc', 'Job'],
@@ -441,6 +496,7 @@ export default function App() {
           </button>
         ))}
       </nav>
+      )}
 
       <SettingsDrawer
         open={drawer === 'settings'}
@@ -482,6 +538,8 @@ export default function App() {
         removeApp={removeApp}
         openApp={openApp}
       />
+
+      {paletteOpen && <CommandPalette open onClose={() => setPaletteOpen(false)} actions={paletteActions} />}
 
       <div className="toast-region" role="status" aria-live="polite">
         {toast && <div className={`toast toast--${toast.kind}`}>{toast.text}</div>}

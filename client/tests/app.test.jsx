@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { render, screen, waitFor, within, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from '../src/App.jsx';
@@ -23,17 +23,93 @@ const writeDrafts = async (user, label = /Write 2 drafts/) => {
 };
 
 describe('ApplyForge app', () => {
-  it('starts with a clear empty state and loads models', async () => {
+  it('opens on the welcome screen with a live example', async () => {
     await setup();
+    expect(screen.getByRole('heading', { name: /Every application\.\s*Tailored and honest\./ })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Try a sample job/ })).toBeInTheDocument();
+    expect(screen.getByRole('img', { name: /Match score 76/ })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'See your match instantly.' })).toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: 'The job' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('navigation', { name: 'Sections' })).not.toBeInTheDocument();
+  });
+
+  it('stays on welcome while typing, then marks it up on request', async () => {
+    const { user } = await setup();
+    const box = screen.getByLabelText('Job description');
+    await user.type(box, 'Data Analyst');
+    expect(screen.getByLabelText('Job description')).toHaveValue('Data Analyst');
+    expect(screen.queryByRole('heading', { name: 'The job' })).not.toBeInTheDocument();
+    fireEvent.change(box, { target: { value: 'Data Analyst. '.repeat(5) } });
+    fireEvent.change(box, { target: { value: 'Data Analyst. '.repeat(6) } });
+    expect(screen.queryByRole('heading', { name: 'The job' })).not.toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: /Mark it up/ }));
     expect(screen.getByRole('heading', { name: 'The job' })).toBeInTheDocument();
-    expect(screen.getByText(/Try a sample job/)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Write 2 drafts/ })).toBeDisabled();
-    expect(screen.getByLabelText('Message the coach')).toBeDisabled();
+    expect(screen.getByRole('button', { name: /Write 2 drafts/ })).toBeInTheDocument();
+  });
+
+  it('pastes from the clipboard into a new job', async () => {
+    navigator.clipboard.readText = vi.fn().mockResolvedValue(JD_TEXT);
+    const { user } = await setup();
+    await user.click(screen.getByRole('button', { name: /Paste from clipboard/ }));
+    await waitFor(() => expect(screen.getByTestId('match-score')).toHaveTextContent('58'), { timeout: 3000 });
+    expect(screen.getByText('Good fit with bridges')).toBeInTheDocument();
+  });
+
+  it('explains when clipboard access is blocked', async () => {
+    navigator.clipboard.readText = vi.fn().mockRejectedValue(new Error('denied'));
+    const { user } = await setup();
+    await user.click(screen.getByRole('button', { name: /Paste from clipboard/ }));
+    expect(await screen.findByText(/Clipboard access was blocked/)).toBeInTheDocument();
+  });
+
+  it('accepts a dropped text file', async () => {
+    await setup();
+    const file = new File([JD_TEXT], 'job.txt', { type: 'text/plain' });
+    fireEvent.drop(screen.getByLabelText('Job description').closest('.drop'), { dataTransfer: { files: [file], getData: () => '' } });
+    await waitFor(() => expect(screen.getByRole('heading', { name: 'The job' })).toBeInTheDocument());
+  });
+
+  it('shows writing progress while drafts are generated', async () => {
+    let release;
+    const { user } = await setup({
+      'POST /api/generate': (b) => new Promise((r) => (release = () => r(json(generateResponse(b.sections, b.tone))))),
+    });
+    await pasteJob(user);
+    await user.click(screen.getByRole('button', { name: /Write 2 drafts/ }));
+    const progress = await screen.findByText(/Writing 2 drafts/);
+    expect(progress.closest('.forge')).toHaveTextContent('Reading the posting');
+    release();
+    await screen.findByRole('tab', { name: 'Email' });
+    expect(screen.getByText('2 drafts ready')).toBeInTheDocument();
+  });
+
+  it('runs actions from the command menu', async () => {
+    const { user } = await setup();
+    await user.keyboard('{Control>}k{/Control}');
+    const search = screen.getByRole('combobox', { name: 'Search commands' });
+    await user.type(search, 'sample');
+    await user.keyboard('{Enter}');
+    expect(screen.queryByRole('dialog', { name: 'Command menu' })).not.toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'The job' })).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Open command menu' }));
+    await user.type(screen.getByRole('combobox'), 'zzz');
+    expect(screen.getByText(/No command matches/)).toBeInTheDocument();
+    await user.keyboard('{Escape}');
+    expect(screen.queryByRole('dialog', { name: 'Command menu' })).not.toBeInTheDocument();
+  });
+
+  it('navigates the command menu with arrow keys', async () => {
+    const { user } = await setup();
+    await pasteJob(user);
+    await user.keyboard('{Control>}k{/Control}');
+    await user.type(screen.getByRole('combobox'), 'theme');
+    await user.keyboard('{ArrowDown}{ArrowUp}{Enter}');
+    expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
   });
 
   it('loads a sample job and marks it up with keyword buckets', async () => {
     const { user } = await setup();
-    await user.click(screen.getByText(/Try a sample job/));
+    await user.click(screen.getByRole('button', { name: /Try a sample job/ }));
     await waitFor(() => expect(screen.getByTestId('match-score')).toBeInTheDocument(), { timeout: 3000 });
     await user.click(screen.getByRole('button', { name: 'Marked up' }));
     const marked = screen.getByTestId('marked-jd');
@@ -294,7 +370,7 @@ describe('ApplyForge app', () => {
     expect(screen.getByLabelText('1 follow-ups due')).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: /Applications/ }));
     expect(screen.getByText(/Time to follow up/)).toBeInTheDocument();
-    await user.click(screen.getByRole('button', { name: /Open/ }));
+    await user.click(screen.getByRole('button', { name: 'Open' }));
     expect(screen.getByLabelText('Recruiter email text')).toHaveValue('saved email');
     expect(screen.getByRole('textbox', { name: 'Role' })).toHaveValue('BI Developer');
   });
@@ -305,6 +381,7 @@ describe('ApplyForge app', () => {
     await writeDrafts(user);
     await user.click(screen.getByRole('button', { name: /New job/ }));
     expect(screen.getByLabelText('Job description')).toHaveValue('');
+    expect(screen.getByRole('heading', { name: /Every application/ })).toBeInTheDocument();
     expect(screen.queryByRole('tab', { name: 'Email' })).not.toBeInTheDocument();
   });
 
@@ -319,6 +396,7 @@ describe('ApplyForge app', () => {
 
   it('switches panes on small screens', async () => {
     const { user } = await setup();
+    await pasteJob(user);
     const nav = screen.getByRole('navigation', { name: 'Sections' });
     await user.click(within(nav).getByRole('button', { name: /Coach/ }));
     expect(document.querySelector('.app').dataset.view).toBe('chat');

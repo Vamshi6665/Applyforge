@@ -1,6 +1,6 @@
 {
   "name": "applyforge",
-  "version": "2.0.0",
+  "version": "2.2.0",
   "private": true,
   "description": "Self-hostable AI copilot that turns a job description into tailored, honest application materials.",
   "license": "MIT",
