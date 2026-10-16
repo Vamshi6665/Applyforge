@@ -1,0 +1,295 @@
+{
+  "source": "reference output written by Claude following ApplyForge's prompts (not GPT); strict mode",
+  "analysis": {
+    "role_title": "Junior Full-Stack Engineer",
+    "company": "Mosaic Health Apps",
+    "seniority": "entry",
+    "archetype": "software_engineer",
+    "archetype_rationale": "Builds product features across a React frontend, a Node.js API, and PostgreSQL, with auth, tests, and deployment.",
+    "core_mandate": "Ship full-stack features end to end: React UI, Node.js API, PostgreSQL schema, authentication and access control, tests, and deployment.",
+    "primary_stack": [
+      {
+        "item": "React",
+        "evidence": "React + TypeScript frontend"
+      },
+      {
+        "item": "TypeScript",
+        "evidence": "React and TypeScript"
+      },
+      {
+        "item": "Node.js",
+        "evidence": "a Node.js API"
+      },
+      {
+        "item": "PostgreSQL",
+        "evidence": "Design PostgreSQL tables and write migrations"
+      },
+      {
+        "item": "Vercel",
+        "evidence": "Ship to production on Vercel and AWS"
+      }
+    ],
+    "must_haves": [
+      "React and TypeScript",
+      "Node.js",
+      "PostgreSQL",
+      "Web security basics"
+    ],
+    "strategy": {
+      "headline": "Software Engineer",
+      "bullet_allocation": [
+        {
+          "role_id": "lama",
+          "bullets": 5,
+          "why": "TIFA is a production full-stack app with auth, schema, migrations, and deployment"
+        },
+        {
+          "role_id": "dxc",
+          "bullets": 5,
+          "why": "Production engineering discipline: releases, monitoring, validation"
+        },
+        {
+          "role_id": "nwmsu",
+          "bullets": 3,
+          "why": "Flask web app and serverless deployment"
+        },
+        {
+          "role_id": "applyforge",
+          "bullets": 3,
+          "why": "React + Node serverless app with unit tests"
+        },
+        {
+          "role_id": "edgecare",
+          "bullets": 2,
+          "why": "Mobile app; thin facts, 2 bullets"
+        }
+      ]
+    }
+  },
+  "resume": {
+    "headline": "Software Engineer",
+    "summary": "Software Engineer with 4+ years of experience shipping production applications and data services, from PostgreSQL schemas and authentication to JavaScript and React interfaces deployed on Vercel. Built and operates a live inventory application that replaced 7 paper and spreadsheet logs for a small business. Holds an M.S. in Applied Computer Science and AWS Cloud Practitioner and Azure certifications.",
+    "experience": [
+      {
+        "role_id": "lama",
+        "company": "LAMA Desserts LLC",
+        "title": "Software Engineer",
+        "location": "Houston, TX",
+        "dates": "Jul 2026 – Present",
+        "bullets": [
+          {
+            "arc_step": "System Design",
+            "label": "Full-Stack Delivery",
+            "text": "Builds and operates a production inventory web app with a JavaScript frontend, a supabase-js data layer, and a Supabase PostgreSQL backend, deployed on Vercel and used daily."
+          },
+          {
+            "arc_step": "Backend and Data Model",
+            "label": "Schema Design",
+            "text": "Designs PostgreSQL tables with status enums, update triggers, and indexed lookups plus an append-only history table, replacing 7 paper and spreadsheet logs."
+          },
+          {
+            "arc_step": "Security and Auth",
+            "label": "Access Control",
+            "text": "Secures the application with Supabase Auth email sign-in and row-level security policies on every table, restricting data access to authenticated sessions."
+          },
+          {
+            "arc_step": "Frontend and UX",
+            "label": "Dashboard Interface",
+            "text": "Implements login, dashboard, and migration pages with stat cards, a reorder schedule, per-item history views, and SheetJS Excel export for purchasing workflows."
+          },
+          {
+            "arc_step": "Deployment and Operations",
+            "label": "Data Migration",
+            "text": "Migrates 8 legacy CSV exports into normalized history rows, parsing free-text thresholds into numeric par levels and routing unparseable values to a review queue."
+          }
+        ]
+      },
+      {
+        "role_id": "nwmsu",
+        "company": "Northwest Missouri State University",
+        "title": "Research Assistant",
+        "location": "Maryville, MO",
+        "dates": "May 2025 – Apr 2026",
+        "bullets": [
+          {
+            "arc_step": "System Design",
+            "label": "Web Application",
+            "text": "Built CodeRepoReader AI as a Flask web app with REST endpoints for repository upload or GitHub URL input and conversational Q&A over the analyzed codebase."
+          },
+          {
+            "arc_step": "Backend and Data Model",
+            "label": "Static Analyzer",
+            "text": "Engineered a static analyzer for 4 languages using Python AST and regex, extracting classes, functions, dependencies, and entry points into structured context."
+          },
+          {
+            "arc_step": "Deployment and Operations",
+            "label": "Serverless Deployment",
+            "text": "Ported the service to the OpenAI SDK and deployed it on Vercel serverless functions with a per-session cache that avoids rescanning repositories on follow-up questions."
+          }
+        ]
+      },
+      {
+        "role_id": "dxc",
+        "company": "DXC Technology",
+        "title": "Data Engineer",
+        "location": "Hyderabad, India",
+        "dates": "Jul 2021 – Dec 2024",
+        "bullets": [
+          {
+            "arc_step": "Backend and Data Model",
+            "label": "Data Services",
+            "text": "Developed Python and SQL services that consolidated 40+ regional SQL Server sources into shared Snowflake datasets, standardizing business keys across roughly 5 million records."
+          },
+          {
+            "arc_step": "Testing and CI/CD",
+            "label": "Release Engineering",
+            "text": "Shipped code through Git and Azure DevOps with peer code reviews and automated checks, keeping pipeline code and configuration changes traceable across releases."
+          },
+          {
+            "arc_step": "Performance and Reliability",
+            "label": "Automated Validation",
+            "text": "Automated source-to-target reconciliation checks that caught data defects before release, reducing recurring reporting errors by more than 90% for downstream users."
+          },
+          {
+            "arc_step": "Deployment and Operations",
+            "label": "Production Support",
+            "text": "Monitored production jobs with Amazon CloudWatch alerts and retries, tracing root causes in schema changes and source outages, then validated fixes before resuming operation."
+          },
+          {
+            "arc_step": "Security and Auth",
+            "label": "Row-Level Security",
+            "text": "Implemented row-level security and scheduled refresh in Power BI so regional stakeholders saw only their own data on dependable, current dashboards."
+          }
+        ]
+      }
+    ],
+    "projects": [
+      {
+        "name": "ApplyForge (AI Resume Copilot)",
+        "tech": [
+          "React",
+          "Vite",
+          "Node.js",
+          "OpenAI SDK",
+          "Vercel"
+        ],
+        "bullets": [
+          {
+            "arc_step": "System Design",
+            "label": "Full-Stack Architecture",
+            "text": "Architected a React and Vite frontend over Vercel serverless REST endpoints in Node.js, orchestrating a 4-stage OpenAI pipeline with JSON Schema structured outputs."
+          },
+          {
+            "arc_step": "Testing and CI/CD",
+            "label": "Automated Testing",
+            "text": "Covered lint rules, schema validity, and DOCX export with unit tests on the Node.js test runner, alongside an evaluation harness over 20 labeled job descriptions."
+          },
+          {
+            "arc_step": "Frontend and UX",
+            "label": "Document Export",
+            "text": "Generated one-page DOCX and print-ready PDF resumes in the browser, auto-fitting font size so every tailored resume renders on a single Letter page."
+          }
+        ]
+      },
+      {
+        "name": "EdgeCare Triage",
+        "tech": [
+          "Android",
+          "TensorFlow Lite",
+          "OpenCV"
+        ],
+        "bullets": [
+          {
+            "arc_step": "System Design",
+            "label": "On-Device Inference",
+            "text": "Built an Android app that runs TensorFlow Lite models on device with OpenCV, keeping triage inference available without a network connection."
+          },
+          {
+            "arc_step": "Performance and Reliability",
+            "label": "Image Preprocessing",
+            "text": "Integrated OpenCV image preprocessing ahead of TensorFlow Lite inference so camera input reached the model in the format it expected."
+          }
+        ]
+      }
+    ],
+    "skills": [
+      {
+        "category": "Languages",
+        "items": [
+          "JavaScript",
+          "Python",
+          "SQL"
+        ]
+      },
+      {
+        "category": "Frameworks & APIs",
+        "items": [
+          "React",
+          "Node.js",
+          "Flask",
+          "REST APIs",
+          "Vite",
+          "JSON Schema"
+        ]
+      },
+      {
+        "category": "Databases",
+        "items": [
+          "PostgreSQL",
+          "Supabase",
+          "Snowflake",
+          "SQL Server"
+        ]
+      },
+      {
+        "category": "Cloud & DevOps",
+        "items": [
+          "Vercel",
+          "Amazon S3",
+          "Amazon CloudWatch",
+          "Git",
+          "GitHub",
+          "Azure DevOps",
+          "Docker"
+        ]
+      },
+      {
+        "category": "Testing",
+        "items": [
+          "Node.js test runner"
+        ]
+      }
+    ],
+    "certifications": [
+      "AWS Certified Cloud Practitioner",
+      "Microsoft Certified: Azure Fundamentals (AZ-900)",
+      "Microsoft Certified: Azure Data Engineer Associate (DP-203)",
+      "Microsoft Certified: Power BI Data Analyst Associate (PL-300)"
+    ],
+    "review_notes": {
+      "stretched_claims": [
+        {
+          "claim": "EdgeCare: OpenCV preprocessing feeding TensorFlow Lite; offline inference",
+          "real_basis": "Project facts only say on-device inference with TensorFlow Lite and OpenCV; confirm details"
+        }
+      ],
+      "suggested_metrics": []
+    }
+  },
+  "outreach": {
+    "emails": [
+      {
+        "label": "Metrics-forward",
+        "subject": "Junior Full-Stack Engineer | production React, Postgres, auth",
+        "body": "Hi Hiring Team,\nGreetings of the day.\n\nI am Vamshi Krishna, a Software Engineer with over four years of experience shipping production applications and data services. I hold a master's degree in Applied Computer Science and am interested in the Junior Full-Stack Engineer position at Mosaic Health Apps.\n\nAt LAMA Desserts, I built and operate a live inventory application with a JavaScript frontend, Supabase Auth, and a PostgreSQL schema secured with row-level security, deployed on Vercel. I also built ApplyForge, a React and Node.js application with serverless APIs and unit tests. At DXC Technology, I shipped production code through Git and Azure DevOps reviews and supported it in operation. This experience aligns with your focus on shipping secure full-stack features from schema to deployment.\n\nI have attached my resume for your consideration. I would welcome the opportunity to learn more about this role and your team, and I look forward to hearing from you regarding the next steps in the hiring process.\n\nBest regards,\nVamshi Krishna Balupari\n+1 (660) 493-5399 | vamshikrishnabalupari@gmail.com\nlinkedin.com/in/vamshikrishnabalupari"
+      }
+    ],
+    "linkedin": [
+      {
+        "label": "Role-specific",
+        "text": "Hi [Name], I'm Vamshi, a software engineer with 4+ years shipping production apps and data services, including a live JavaScript and PostgreSQL app with auth on Vercel. I recently completed my MS in Computer Science and would be glad to connect about the Junior Full-Stack Engineer role at Mosaic."
+      }
+    ]
+  },
+  "notes": "First drafts of the LinkedIn note ran 302 to 316 characters; shortened as the pipeline's length step would."
+}

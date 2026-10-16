@@ -1,0 +1,314 @@
+{
+  "source": "reference output written by Claude following ApplyForge's prompts (not GPT); strict mode",
+  "analysis": {
+    "role_title": "Data Analyst",
+    "company": "Fieldstone Retail",
+    "seniority": "mid",
+    "archetype": "data_engineer",
+    "archetype_rationale": "Title says analyst, but most duties are building and owning Python ingestion jobs, Airflow orchestration, and dbt models; dashboards are occasional.",
+    "core_mandate": "Own the ingestion and transformation pipelines that load POS, e-commerce, and loyalty data into the warehouse, keep them reliable, and make the tables answer merchandising questions.",
+    "primary_stack": [
+      {
+        "item": "Python",
+        "evidence": "Build and maintain Python ingestion jobs"
+      },
+      {
+        "item": "Apache Airflow",
+        "evidence": "Orchestrate daily and hourly loads in Apache Airflow (Cloud Composer)"
+      },
+      {
+        "item": "dbt",
+        "evidence": "Model raw data into clean, tested tables with dbt"
+      },
+      {
+        "item": "SQL",
+        "evidence": "experience with Python and SQL in a data role"
+      },
+      {
+        "item": "BigQuery",
+        "evidence": "load ... data into BigQuery"
+      }
+    ],
+    "must_haves": [
+      "Python and SQL",
+      "Airflow or another orchestrator",
+      "Cloud data warehouse (BigQuery, Snowflake, or Redshift)",
+      "Own pipelines end to end, including on-call"
+    ],
+    "strategy": {
+      "headline": "Data Engineer",
+      "bullet_allocation": [
+        {
+          "role_id": "dxc",
+          "bullets": 7,
+          "why": "Strongest proof of warehouse ingestion, testing, and on-call recovery"
+        },
+        {
+          "role_id": "lama",
+          "bullets": 5,
+          "why": "Small-team, end-to-end pipeline ownership mirrors this team"
+        },
+        {
+          "role_id": "nwmsu",
+          "bullets": 3,
+          "why": "Supporting proof of reproducible data preparation"
+        },
+        {
+          "role_id": "instacart",
+          "bullets": 2,
+          "why": "Only project with Airflow orchestration"
+        },
+        {
+          "role_id": "applyforge",
+          "bullets": 2,
+          "why": "Shows tested, schema-validated pipeline design"
+        }
+      ]
+    }
+  },
+  "resume": {
+    "headline": "Data Engineer",
+    "summary": "Data Engineer with 4+ years of experience building Python ingestion pipelines, orchestrated batch loads, and tested SQL transformation models on cloud data warehouses. Consolidated 40+ regional sources into Snowflake datasets covering roughly 5 million reporting records and reduced recurring reporting errors by more than 90% through automated reconciliation. Holds an M.S. in Applied Computer Science and DP-203 and AWS Cloud Practitioner certifications.",
+    "experience": [
+      {
+        "role_id": "lama",
+        "company": "LAMA Desserts LLC",
+        "title": "Data Engineer",
+        "location": "Houston, TX",
+        "dates": "Jul 2026 – Present",
+        "bullets": [
+          {
+            "arc_step": "Ingestion and Integration",
+            "label": "Pipeline Ownership",
+            "text": "Owns end-to-end ingestion for a small-business data platform, loading sales, inventory, product, and vendor records from CSV and spreadsheet sources into PostgreSQL with Python and Pandas."
+          },
+          {
+            "arc_step": "Data Modeling and Warehousing",
+            "label": "History Modeling",
+            "text": "Designs normalized PostgreSQL tables and an append-only count history with indexed lookups and update triggers, replacing 7 paper and spreadsheet logs with one governed source."
+          },
+          {
+            "arc_step": "Data Quality and Validation",
+            "label": "Validated Migration",
+            "text": "Migrates 8 legacy CSV exports into dated history rows, parsing free-text thresholds into numeric par levels and quarantining unparseable counts in a manual-review queue."
+          },
+          {
+            "arc_step": "Orchestration and Incremental Loads",
+            "label": "Recurring Automation",
+            "text": "Automates weekly and monthly data preparation with repeatable Python and SQL jobs, so business reviews run on current data without manual spreadsheet consolidation."
+          },
+          {
+            "arc_step": "Downstream Delivery",
+            "label": "Analytics Serving",
+            "text": "Exposes reusable SQL views joining transactions, products, vendors, and inventory snapshots to Power BI, giving owners reorder and slow-moving-stock reporting for purchasing."
+          }
+        ]
+      },
+      {
+        "role_id": "nwmsu",
+        "company": "Northwest Missouri State University",
+        "title": "Data Research Assistant",
+        "location": "Maryville, MO",
+        "dates": "May 2025 – Apr 2026",
+        "bullets": [
+          {
+            "arc_step": "Ingestion and Integration",
+            "label": "Repository Extraction",
+            "text": "Engineered a static-analysis extraction pipeline with Python AST and regex parsers across 4 languages, converting raw repositories into structured metadata consumed by LLM agents."
+          },
+          {
+            "arc_step": "Data Quality and Validation",
+            "label": "Reproducible Datasets",
+            "text": "Built validated experiment datasets with Python, Pandas, and SQL, standardizing preprocessing and feature generation so model comparisons reran identically across experiments."
+          },
+          {
+            "arc_step": "Downstream Delivery",
+            "label": "Benchmark Reporting",
+            "text": "Benchmarked 2 agent SDKs across 3 LLMs on context handling, tool integration, and response quality, publishing the comparison in a co-authored research paper."
+          }
+        ]
+      },
+      {
+        "role_id": "dxc",
+        "company": "DXC Technology",
+        "title": "Data Engineer",
+        "location": "Hyderabad, India",
+        "dates": "Jul 2021 – Dec 2024",
+        "bullets": [
+          {
+            "arc_step": "Ingestion and Integration",
+            "label": "Source Consolidation",
+            "text": "Engineered Azure Data Factory ingestion and Databricks PySpark transformations consolidating 40+ regional SQL Server sources into Snowflake datasets covering roughly 5 million reporting records."
+          },
+          {
+            "arc_step": "Data Modeling and Warehousing",
+            "label": "Dimensional Modeling",
+            "text": "Modeled fact tables, conformed dimensions, and star schemas with standardized business keys, giving reporting teams consistent definitions for cross-region workload analysis."
+          },
+          {
+            "arc_step": "Data Quality and Validation",
+            "label": "Reconciliation Testing",
+            "text": "Automated source-to-target validation and reconciliation tests between raw and curated layers, reducing recurring reporting errors by more than 90% across published datasets."
+          },
+          {
+            "arc_step": "Orchestration and Incremental Loads",
+            "label": "Incremental Processing",
+            "text": "Orchestrated incremental loads and controlled backfills over partitioned Parquet on Amazon S3 with AWS Glue, absorbing corrected measurements without rebuilding full history."
+          },
+          {
+            "arc_step": "Observability and Incident Recovery",
+            "label": "Failure Recovery",
+            "text": "Monitored daily pipeline runs with Amazon CloudWatch alerts and retries, tracing schema changes and source outages to restore failed loads and validate corrected outputs."
+          },
+          {
+            "arc_step": "CI/CD and Release",
+            "label": "Release Workflow",
+            "text": "Shipped pipeline changes through Git and Azure DevOps with code reviews and automated checks, keeping transformation logic and configurations traceable across releases."
+          },
+          {
+            "arc_step": "Downstream Delivery",
+            "label": "Capacity Analytics",
+            "text": "Delivered curated utilization history from Databricks into Snowflake for an 80% threshold dashboard, enabling proactive upgrades that cut storage-related escalations by 25%."
+          }
+        ]
+      }
+    ],
+    "projects": [
+      {
+        "name": "Instacart Market Basket ETL Pipeline",
+        "tech": [
+          "PySpark",
+          "Apache Airflow"
+        ],
+        "bullets": [
+          {
+            "arc_step": "Orchestration and Incremental Loads",
+            "label": "Batch Orchestration",
+            "text": "Orchestrated PySpark batch transformations over the public Instacart orders dataset with Apache Airflow DAGs, producing analysis-ready tables for basket and reorder analysis."
+          },
+          {
+            "arc_step": "Data Modeling and Warehousing",
+            "label": "Table Modeling",
+            "text": "Modeled order, product, and department data into Parquet tables with Spark SQL so reorder-rate and basket-size queries ran without reprocessing raw CSV files."
+          }
+        ]
+      },
+      {
+        "name": "ApplyForge (AI Resume Copilot)",
+        "tech": [
+          "Node.js",
+          "OpenAI SDK",
+          "JSON Schema"
+        ],
+        "bullets": [
+          {
+            "arc_step": "Data Quality and Validation",
+            "label": "Quality Gates",
+            "text": "Architected a 4-stage LLM pipeline with JSON Schema structured outputs and deterministic lint gates that reject unsupported numbers, weak verbs, and unbacked claims before delivery."
+          },
+          {
+            "arc_step": "Downstream Delivery",
+            "label": "Evaluation Harness",
+            "text": "Evaluated pipeline output across 20 labeled job descriptions with automated metrics for classification accuracy, tool recall, and unsupported claims, plus an LLM recruiter-judge rubric."
+          }
+        ]
+      }
+    ],
+    "skills": [
+      {
+        "category": "Languages",
+        "items": [
+          "Python",
+          "SQL",
+          "PySpark",
+          "Spark SQL",
+          "T-SQL"
+        ]
+      },
+      {
+        "category": "Orchestration & Integration",
+        "items": [
+          "Apache Airflow",
+          "Azure Data Factory",
+          "AWS Glue",
+          "dbt",
+          "Databricks Workflows"
+        ]
+      },
+      {
+        "category": "Warehousing & Databases",
+        "items": [
+          "Snowflake",
+          "PostgreSQL",
+          "SQL Server"
+        ]
+      },
+      {
+        "category": "Processing & Storage",
+        "items": [
+          "Apache Spark",
+          "Azure Databricks",
+          "Delta Lake",
+          "Apache Parquet",
+          "Amazon S3",
+          "ADLS Gen2"
+        ]
+      },
+      {
+        "category": "Data Modeling & Architecture",
+        "items": [
+          "Dimensional Modeling",
+          "Star Schema",
+          "Medallion Architecture",
+          "Incremental Processing"
+        ]
+      },
+      {
+        "category": "Tools",
+        "items": [
+          "Git",
+          "GitHub",
+          "Azure DevOps",
+          "Amazon CloudWatch",
+          "Power BI Desktop"
+        ]
+      }
+    ],
+    "certifications": [
+      "Microsoft Certified: Azure Data Engineer Associate (DP-203)",
+      "AWS Certified Cloud Practitioner",
+      "Microsoft Certified: Power BI Data Analyst Associate (PL-300)",
+      "Microsoft Certified: Azure Fundamentals (AZ-900)"
+    ],
+    "review_notes": {
+      "stretched_claims": [
+        {
+          "claim": "Instacart: Spark SQL table modeling for reorder-rate and basket-size queries",
+          "real_basis": "Project facts only say PySpark + Airflow into analysis-ready tables; confirm the table design before sending"
+        }
+      ],
+      "suggested_metrics": [
+        {
+          "where": "Instacart project",
+          "metric_idea": "Rows or orders processed per run (the public dataset has a known size)"
+        }
+      ]
+    }
+  },
+  "outreach": {
+    "emails": [
+      {
+        "label": "Metrics-forward",
+        "subject": "Data Analyst | Python pipelines, Airflow, tested SQL models",
+        "body": "Hi Hiring Team,\nGreetings of the day.\n\nI am Vamshi Krishna, a Data Engineer with over four years of experience building Python ingestion pipelines and tested SQL transformation models for reporting. I hold a master's degree in Applied Computer Science and am interested in the Data Analyst position at Fieldstone Retail.\n\nAt DXC Technology, I engineered Azure Data Factory and Databricks pipelines that consolidated 40+ regional sources into Snowflake datasets, automated reconciliation checks that reduced recurring reporting errors by more than 90%, and owned recovery of failed loads. At LAMA Desserts, I own the full pipeline for a small business, from CSV ingestion to the SQL views behind its reporting. This experience aligns with your need for someone who builds the pipelines feeding your reporting and owns them end to end.\n\nI have attached my resume for your consideration. I would welcome the opportunity to learn more about this role and your team, and I look forward to hearing from you regarding the next steps in the hiring process.\n\nBest regards,\nVamshi Krishna Balupari\n+1 (660) 493-5399 | vamshikrishnabalupari@gmail.com\nlinkedin.com/in/vamshikrishnabalupari"
+      }
+    ],
+    "linkedin": [
+      {
+        "label": "Role-specific",
+        "text": "Hi [Name], I'm Vamshi, a Data Engineer with 4+ years building Python pipelines, orchestrated loads, and tested SQL models on cloud warehouses. I hold an MS in Computer Science, DP-203, and AWS certifications, and I'm interested in the Data Analyst role at Fieldstone Retail. Glad to connect."
+      }
+    ]
+  },
+  "notes": "First drafts of the LinkedIn note ran 302 to 316 characters; shortened as the pipeline's length step would."
+}
