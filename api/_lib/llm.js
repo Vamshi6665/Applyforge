@@ -2,7 +2,13 @@ import OpenAI from "openai";
 import { DEFAULT_PROFILE } from "./profile.js";
 
 export function client(req) {
-  const apiKey = req.headers["x-openai-key"] || process.env.OPENAI_API_KEY;
+  // accept the names earlier ApplyForge versions or Vercel setups may have used
+  const apiKey =
+    req.headers["x-openai-key"] ||
+    process.env.OPENAI_API_KEY ||
+    process.env.OPENAI_KEY ||
+    process.env.VITE_OPENAI_API_KEY ||
+    process.env.OPENAI_SECRET_KEY;
   if (!apiKey) {
     const e = new Error("No OpenAI API key. Set OPENAI_API_KEY on the server or add a key in Settings.");
     e.status = 401;

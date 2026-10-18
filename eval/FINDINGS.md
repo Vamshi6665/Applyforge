@@ -63,3 +63,25 @@ open eval/out/report.md
 ```
 
 The report adds judge scores per dimension, advance rate, recurring problems by section, and the judge's rule suggestions. Bring it back and we fix the rules from it.
+
+
+---
+
+# Round 2 — Structure update (v2.3)
+
+Changes requested: no Projects section; LAMA Desserts at least 4 bullets; Northwest Missouri 3 to 4; DXC 6 to 8; each JD requirement shown in the role where the work really happened; lifecycle order inside every role; JD wording used where it is true.
+
+| Measure (3 reference resumes, after the change) | Result |
+|---|---|
+| Lint errors | 0 |
+| LAMA Desserts with 4+ bullets | 100% |
+| JD requirements visible in their mapped role | 100% |
+| Roles in lifecycle order | 100% |
+| Tools placed in a role that never used them | 0 |
+| Claims of tools you do not have | 0 |
+| Wording shared between different role families | 11% (LAMA 6%, NWMSU 5%, DXC 21%) |
+| One page in DOCX at 10.5 pt | 3/3 |
+
+What the new checks caught in my own reference writing: an outdated stage name, the weak opener "Writes", and a resume one bullet short of the 15 minimum. All fixed.
+
+Trade-off to know: with Projects gone, tools seen only in personal projects (React, Node.js, Airflow) can appear in Technical Skills but not in bullets. Software and AI resumes lean on LAMA, Northwest Missouri, and DXC alone, and software resumes carry fewer numbers (33% vs the 40% target).

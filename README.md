@@ -41,6 +41,7 @@ Results land in `eval/out/report.md`. Round 1 findings are in [eval/FINDINGS.md]
 - **Forge application** runs all four stages. The Role Analysis tab fills first.
 - **Resume tab**: click any bullet or the summary to edit; type a change request in the revise bar; Download DOCX or Save as PDF (one Letter page, auto-fit 10.5 to 9.5 pt).
 - **Quality panel** shows spec violations, stretched claims to prepare for, and metric ideas.
+- **Analysis tab** shows each JD requirement and the role where it will appear on your resume (or "Not claimed").
 - **Stretch mode** allows close-equivalent JD tools; each one is listed for review.
 - **Profile** edits the master facts and the metrics bank (saved in your browser).
 - **History** keeps your last 20 runs; mark each with an outcome.

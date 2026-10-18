@@ -1,5 +1,6 @@
 // Deterministic quality checks from SPEC §3.3–3.6 and §5. Pure functions, no I/O.
-import { extract } from "./terms.js";
+import { extract, roleEvidence } from "./terms.js";
+import { ARCS } from "./prompts.js";
 
 export const BANNED_OPENERS = [
   "used", "use", "uses", "wrote", "write", "writes", "worked", "work", "works", "helped", "help", "helps",
@@ -14,7 +15,23 @@ export const NON_TECH_SKILLS = [
   "data pipelines", "decision making", "decision-making", "documentation", "mentoring", "adaptability",
 ];
 
-const BUDGET = { lama: [2, 5], nwmsu: [2, 5], dxc: [4, 7] };
+const BUDGET = { lama: [4, 5], nwmsu: [3, 4], dxc: [6, 8] };
+const TOTAL = [15, 17];
+
+const STOP = new Set("with and the for from into using across their that this your will have experience ability strong including other data within such plus well about able work working".split(" "));
+const contentWords = (t) => (t || "").toLowerCase().replace(/[^a-z0-9/ -]/g, " ").split(/[\s/-]+/).filter((w) => w.length >= 4 && !STOP.has(w));
+const stem = (w) => w.slice(0, 5);
+
+// which arc a role's steps come from, and each step's position in it
+function arcPositions(steps) {
+  let best = null, bestHits = -1;
+  for (const arc of Object.values(ARCS)) {
+    const lower = arc.map((x) => x.toLowerCase());
+    const hits = steps.filter((s) => lower.includes(s)).length;
+    if (hits > bestHits) { best = lower; bestHits = hits; }
+  }
+  return steps.map((s) => best.indexOf(s));
+}
 
 const trigrams = (t) => {
   const w = t.toLowerCase().replace(/[^a-z0-9 ]/g, " ").split(/\s+/).filter(Boolean);
@@ -103,7 +120,7 @@ export function autofix(resume) {
   const r = structuredClone(resume);
   r.summary = clean(r.summary);
   r.experience.forEach((e) => e.bullets.forEach((b) => { b.label = clean(b.label).replace(/:$/, ""); b.text = clean(b.text); }));
-  r.projects.forEach((p) => p.bullets.forEach((b) => { b.label = clean(b.label).replace(/:$/, ""); b.text = clean(b.text); }));
+  delete r.projects; // no projects section: project work lives inside the role where it happened
   return r;
 }
 
@@ -118,6 +135,7 @@ export function lintResume(resume, profile, { stretch = false, approvedStretch =
   approvedStretch.forEach((x) => inv.add(norm(x)));
 
   const owners = numberOwners(profile);
+  const evidence = roleEvidence(profile);
   const bankRoles = new Set(profile.metricsBank.map((m) => m.role));
   const verbCount = {};
   let bulletTotal = 0;
@@ -145,6 +163,10 @@ export function lintResume(resume, profile, { stretch = false, approvedStretch =
       if (o && !o.has("general") && !o.has(role))
         push("error", where, `"${key}" is a ${[...o].join("/")} metric; it cannot be claimed here.`);
     });
+    if (evidence[role]) {
+      const company = profile.experience.find((x) => x.id === role)?.company || role;
+      extract(b.text).filter((t) => !evidence[role].has(t.name)).forEach((t) => push("warn", where, `"${t.name}" is not in your ${company} record. Use it only in the role where you did that work.`));
+    }
     const tg = trigrams(b.text);
     if (sources.some((src) => overlap(tg, src) >= 0.5)) push("warn", where, "Reads like a copy of the base profile. Rewrite it for this JD.");
   };
@@ -157,18 +179,28 @@ export function lintResume(resume, profile, { stretch = false, approvedStretch =
     const steps = e.bullets.map((b) => (b.arc_step || "").toLowerCase()).filter(Boolean);
     const dup = steps.find((x, i) => steps.indexOf(x) !== i);
     if (dup) push("warn", e.company, `Two bullets cover the same stage ("${dup}"). Each bullet should cover a distinct stage.`);
+    if (e.role_id === "lama" && e.bullets.length < 4) push("error", e.company, `Has ${e.bullets.length} bullets; LAMA Desserts always needs at least 4.`);
+    if (steps.length === e.bullets.length && steps.length > 2) {
+      const pos = arcPositions(steps).slice(1); // the first bullet is the lead proof and may come from any stage
+      if (pos.some((p) => p < 0)) push("warn", e.company, "A bullet's arc_step is not a known stage name.");
+      else if (pos.some((p, i) => i > 0 && p < pos[i - 1])) push("warn", e.company, "After the lead bullet, bullets should follow lifecycle order: define, design, build, test, deploy and operate, impact.");
+    }
     e.bullets.forEach((b, i) => checkBullet(b, `${e.company} #${i + 1}`, labels, e.role_id));
     if (e.bullets.length >= 3 && bankRoles.has(e.role_id) && !e.bullets.some((b) => numbersIn(b.text).length))
       push("warn", e.company, "No metric in this role although the metrics bank has numbers for it.");
     if (/at&t|vfs/i.test(JSON.stringify(e))) push("error", e.company, "Client name present. DXC is written without clients.");
   });
-  resume.projects.forEach((p) => {
-    const labels = new Set();
-    const role = projectRole(profile, p.name);
-    const pid = profile.projects.find((x) => x.role === role && norm(p.name).includes(norm(x.name).slice(0, 10)))?.id;
-    if (p.bullets.length < 2 || p.bullets.length > 3) push("warn", p.name, `Has ${p.bullets.length} bullets; projects take 2 or 3.`);
-    else if (pid && alloc[pid] && alloc[pid] !== p.bullets.length) push("warn", p.name, `Has ${p.bullets.length} bullets; the role analysis allocated ${alloc[pid]}.`);
-    p.bullets.forEach((b, i) => checkBullet(b, `${p.name} #${i + 1}`, labels, role));
+  if (resume.projects?.length) push("error", "Projects", "There is no Projects section. Write project work inside the role where it happened.");
+  const expTotal = resume.experience.reduce((n, e) => n + e.bullets.length, 0);
+  if (expTotal < TOTAL[0] || expTotal > TOTAL[1]) push("warn", "Experience", `Has ${expTotal} bullets in total; target ${TOTAL[0]} to ${TOTAL[1]}.`);
+
+  (analysis?.requirement_map || []).filter((r) => r.role_id && r.role_id !== "none").forEach((r) => {
+    const e = resume.experience.find((x) => x.role_id === r.role_id);
+    if (!e) return;
+    const have = new Set(contentWords(e.bullets.map((b) => b.text).join(" ")).map(stem));
+    const want = contentWords(r.jd_wording);
+    const hit = want.filter((w) => have.has(stem(w))).length;
+    if (want.length && hit / want.length < 0.5) push("warn", "Requirements", `JD requirement "${r.jd_wording}" is mapped to ${e.company} but not visible in its bullets.`);
   });
 
   Object.entries(verbCount).forEach(([v, c]) => { if (c > 2) push("warn", "Verbs", `"${v}" opens ${c} bullets; max 2.`); });
@@ -176,13 +208,13 @@ export function lintResume(resume, profile, { stretch = false, approvedStretch =
 
   const tm = analysis?.term_map;
   if (tm) {
-    const text = [resume.summary, ...resume.experience.flatMap((e) => e.bullets.map((b) => b.text)), ...resume.projects.flatMap((p) => [...p.tech, ...p.bullets.map((b) => b.text)]), ...resume.skills.flatMap((c) => c.items)].join(" \n ");
+    const text = [resume.summary, ...resume.experience.flatMap((e) => e.bullets.map((b) => b.text)), ...resume.skills.flatMap((c) => c.items)].join(" \n ");
     const used = new Set(extract(text).map((t) => t.name));
     tm.gaps.filter((g) => used.has(g)).forEach((g) => push("error", "Honesty", `"${g}" is a gap in your profile but appears on the resume.`));
     if (!stretch) tm.bridgeable.filter((g) => used.has(g)).forEach((g) => push("warn", "Honesty", `"${g}" is only bridgeable (strict mode). Name your real equivalent or turn on stretch mode.`));
     const core = new Set(extract([...(analysis.primary_stack || []).map((x) => x.item), ...(analysis.must_haves || [])].join(" \n ")).map((t) => t.name));
     if (tm.unbacked?.length) {
-      const bulletText = [...resume.experience.flatMap((e) => e.bullets), ...resume.projects.flatMap((p) => p.bullets)].map((b) => b.text).join(" \n ");
+      const bulletText = resume.experience.flatMap((e) => e.bullets).map((b) => b.text).join(" \n ");
       const inBullets = new Set(extract(bulletText).map((t) => t.name));
       tm.unbacked.filter((u) => inBullets.has(u)).forEach((u) => push("error", "Evidence", `"${u}" appears in a bullet, but no work in your profile shows it. Keep it in Skills or add the real work to your profile.`));
     }

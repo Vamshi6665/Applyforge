@@ -70,8 +70,19 @@ export function correlate(jdText, profile) {
   return { terms: jd.map((t) => t.name), matched, bridgeable, context, gaps, coverage: matched.length / n, reach: (matched.length + bridgeable.length) / n };
 }
 
-// Inventory tools that no fact, lens, or project stack supports. They may sit in Skills, never in a bullet.
+// Tools each experience role's record shows: its facts, lenses, and project work done inside that role.
+export function roleEvidence(profile) {
+  const out = {};
+  for (const e of profile.experience) {
+    const linked = profile.projects.filter((p) => p.role === e.id);
+    out[e.id] = new Set(extract(JSON.stringify({ f: e.facts, l: e.lenses, p: linked.map((p) => [p.facts, p.stack]) })).map((t) => t.name));
+  }
+  return out;
+}
+
+// Inventory tools that no experience role supports (personal-project-only tools included). Skills section only.
 export function unbacked(profile) {
-  const backed = new Set(extract(JSON.stringify({ f: profile.experience.map((e) => [e.facts, e.lenses]), p: profile.projects })).map((t) => t.name));
+  const ev = roleEvidence(profile);
+  const backed = new Set(Object.values(ev).flatMap((s) => [...s]));
   return extract(Object.values(profile.skillInventory).flat().join(" \n ")).filter((t) => !backed.has(t.name)).map((t) => t.name);
 }

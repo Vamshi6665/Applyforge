@@ -32,6 +32,7 @@ const fixtures = opt("fixtures", null);
 const stretch = flag("stretch");
 const concurrency = Number(opt("concurrency", 3));
 const model = opt("model", process.env.OPENAI_MODEL || "gpt-4o");
+process.env.OPENAI_API_KEY ||= process.env.OPENAI_KEY || process.env.VITE_OPENAI_API_KEY || process.env.OPENAI_SECRET_KEY || "";
 const useJudge = !flag("no-judge") && !!process.env.OPENAI_API_KEY;
 if (!fixtures && !process.env.OPENAI_API_KEY) {
   console.error("OPENAI_API_KEY is not set. Add it to .env, or use --fixtures <dir> to score saved outputs.");
@@ -53,8 +54,7 @@ async function invoke(handler, body) {
 const plain = (r, p) => {
   const L = [p.name.toUpperCase(), r.summary, "", "PROFESSIONAL EXPERIENCE"];
   r.experience.forEach((e) => { L.push(`${e.company} | ${e.title} | ${e.dates}`); e.bullets.forEach((b) => L.push(`• ${b.label}: ${b.text}`)); });
-  L.push("", "PROJECTS");
-  r.projects.forEach((x) => { L.push(`${x.name} | ${x.tech.join(", ")}`); x.bullets.forEach((b) => L.push(`• ${b.label}: ${b.text}`)); });
+  (r.projects || []).forEach((x) => { L.push(`${x.name} | ${x.tech.join(", ")}`); x.bullets.forEach((b) => L.push(`• ${b.label}: ${b.text}`)); });
   L.push("", "TECHNICAL SKILLS", ...r.skills.map((s) => `${s.category}: ${s.items.join(", ")}`), "", "CERTIFICATIONS", r.certifications.join(" | "));
   return L.join("\n");
 };
@@ -120,6 +120,10 @@ const summary = {
   verb_diversity: mean(M.map((m) => m.verb_diversity)),
   arc_distinct: mean(M.map((m) => m.arc_distinct)),
   allocation_ok: mean(M.map((m) => +m.allocation_ok)),
+  requirement_coverage: mean(M.map((m) => m.requirement_coverage).filter((x) => x != null)),
+  lifecycle_ok: mean(M.map((m) => +m.lifecycle_ok)),
+  role_evidence_flags: M.reduce((s, m) => s + m.role_evidence_flags, 0),
+  lama_min4: mean(M.map((m) => +(m.lama_bullets >= 4))),
   email_ok: mean(M.map((m) => +m.email_ok)),
   linkedin_ok: mean(M.map((m) => +m.linkedin_ok)),
   variation: v,
@@ -138,6 +142,10 @@ L.push(`| Bullets with a number | ${pct(summary.metric_density)} | 40%+ |`);
 L.push(`| Distinct opening verbs | ${pct(summary.verb_diversity)} | 85%+ |`);
 L.push(`| Roles with distinct arc stages | ${pct(summary.arc_distinct)} | 100% |`);
 L.push(`| Bullet allocation followed | ${pct(summary.allocation_ok)} | 100% |`);
+L.push(`| LAMA Desserts has 4+ bullets | ${pct(summary.lama_min4)} | 100% |`);
+L.push(`| JD requirements visible in their mapped role | ${pct(summary.requirement_coverage)} | 90%+ |`);
+L.push(`| Roles in lifecycle order | ${pct(summary.lifecycle_ok)} | 100% |`);
+L.push(`| Tools placed in a role that never used them | ${summary.role_evidence_flags} | 0 |`);
 L.push(`| Email structure correct | ${pct(summary.email_ok)} | 100% |`);
 L.push(`| LinkedIn ≤ 300 chars | ${pct(summary.linkedin_ok)} | 100% |`);
 
@@ -184,6 +192,7 @@ done.forEach((r) => {
   L.push(`### ${r.jd.id} · ${r.jd.title} (${r.jd.company})`, `Test: ${r.jd.trap}`, "");
   L.push(`- Read as **${a.archetype}** (${a.seniority}). Mandate: ${a.core_mandate}`);
   L.push(`- Allocation: ${(a.strategy?.bullet_allocation || []).map((x) => `${x.role_id} ${x.bullets}`).join(", ")} · Titles: ${r.metrics.titles.join(", ")}`);
+  (a.requirement_map || []).forEach((q) => L.push(`  - "${q.jd_wording}" → ${q.role_id}`));
   if (r.judge) {
     L.push(`- 8-second take: ${r.judge.eight_second_take}`);
     r.judge.problems.forEach((p) => L.push(`- Problem [${p.severity}] ${p.section}: ${p.issue}`));

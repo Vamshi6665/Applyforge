@@ -1,4 +1,4 @@
-# ApplyForge Specification v2.2 — Personalized Resume Forge
+# ApplyForge Specification v2.3 — Personalized Resume Forge
 
 ApplyForge is a single-user tool for Vamshi Krishna Balupari. Paste a job description (JD); ApplyForge returns three deliverables built for that JD only:
 
@@ -15,11 +15,11 @@ This document is the source of truth. The prompts in `api/_lib/prompts.js` and t
 | # | Principle | What it means in practice |
 |---|-----------|---------------------------|
 | P1 | **Read the role, not the keywords** | The JD is analyzed for the job to be done, who the person answers to, what they own, and what success looks like. Keywords come last. |
-| P2 | **Restructure, don't decorate** | Every section of the resume (headline, summary, bullets, projects, skills order) is rebuilt around the role archetype. Adding keywords to an unchanged resume is a failure. |
+| P2 | **Restructure, don't decorate** | Every section of the resume (headline, summary, every role's bullets, skills order) is rebuilt around the role archetype. Adding keywords to an unchanged resume is a failure. |
 | P3 | **Technically sound** | Every bullet must describe a mechanism that would hold up in a technical interview: the tool does what the bullet says it did, in a sensible order, at a believable scale. |
 | P4 | **Natural, not keyword-stuffed** | A technology appears in a bullet because it was the right tool for the work described, never because the JD listed it. |
 | P5 | **Honest** | No invented employers, degrees, certifications, or numbers. Framing may change; facts may not. Anything stretched is listed for review (see §6). |
-| P6 | **Different JD → different resume** | Two JDs with different archetypes must produce visibly different headlines, summaries, bullet sets, project choices, and skill orders. |
+| P6 | **Different JD → different resume** | Two JDs with different archetypes must produce visibly different headlines, summaries, bullet sets, bullet allocation, and skill orders. |
 
 ---
 
@@ -51,8 +51,8 @@ The analyzer reads the JD the way a hiring manager would, and returns a structur
 - Headline title to use on the resume
 - Summary angle (what the first sentence must prove)
 - Emphasis for each role: which real work to lead with and which stack to frame it in
-- Which two projects to include and why
 - Bullet allocation per role (§3.2a)
+- Requirement map (§3.2c)
 - Skill category order
 
 ---
@@ -75,7 +75,6 @@ Company                                              Mon YYYY – Mon YYYY
 Title                                                         Location
  • Bold Lead-In Label: action + mechanism + stack + outcome/metric
  ...
-PROJECTS
 TECHNICAL SKILLS   (Category : items)
 CERTIFICATIONS
 EDUCATION
@@ -97,29 +96,41 @@ All three roles are rewritten for every JD. None of them keeps default bullets.
 
 ### 3.2a Bullet allocation (set by the analysis, per JD)
 
-| Role | Range | Weighted toward |
+There is **no Projects section**. Project work is written inside the role where it happened: the inventory system under LAMA Desserts (never named TIFA), CodeRepoReader and the SHAP/Anchor framework under Northwest Missouri State. Personal projects (Instacart, ApplyForge, EdgeCare) are not shown; their tools can appear in Technical Skills only.
+
+| Role | Bullets | Weighted toward |
 |---|---|---|
-| DXC Technology | 4 to 7 | pipeline, BI, warehouse, platform roles |
-| LAMA Desserts LLC | 2 to 5 | BI, analytics, full-stack, small-team ownership roles |
-| Northwest Missouri State University | 2 to 5 | ML, LLM, research, data science roles |
-| Projects (2) | 2 or 3 each | strongest project for the role gets 3 |
+| LAMA Desserts LLC | 4 to 5, never fewer than 4 (US experience) | BI, analytics, full-stack, small-team ownership roles |
+| Northwest Missouri State University | 3 to 4 | ML, LLM, research roles |
+| DXC Technology | 6 to 8 | pipeline, BI, warehouse, platform roles |
 
-Experience bullets total 13 to 16; projects get 2 or 3 bullets each (2 when a project has only one or two facts); all bullets 18 to 20. The analysis explains each allocation.
+Total: 15 to 17 experience bullets. The analysis explains each allocation.
 
-### 3.2b Industry arcs
+### 3.2b Industry arcs in lifecycle order
 
-A role carrying the mandate uses the archetype's arc; a supporting role uses its own discipline's arc (DXC on an LLM role uses the data engineer arc, framed as the data foundations behind AI) and leads with the stage closest to the mandate. Each role's bullets cover **distinct stages**, so the role reads as a complete scope of ownership rather than a random set of tasks. The first bullet is the strongest proof of the mandate. Two bullets in one role may not sit on the same stage.
+Each role reads like a project its owner took from definition to impact. The **first bullet** is the role's strongest proof of the JD's mandate. **Every bullet after it follows lifecycle order**: define → design → build → test and validate → deploy and operate → impact. Two bullets in one role never sit on the same stage.
 
-| Archetype | Arc stages |
+| Archetype | Arc stages, in order |
 |---|---|
-| data_engineer | Ingestion and Integration → Distributed Transformation → Data Modeling and Warehousing → Data Quality and Validation → Orchestration and Incremental Loads → Observability and Incident Recovery → CI/CD and Release → Downstream Delivery |
-| data_analyst_bi | Requirements and KPI Definition → SQL Analysis and Data Preparation → Semantic Modeling and DAX → Dashboard and Self-Service Delivery → Insight and Decision Impact → Data Governance and Access → Adoption, UAT, and Training |
-| analytics_engineer | Source Profiling and Mapping → Layered Transformation → Dimensional Modeling → Testing and Reconciliation → Semantic Layer → Documentation and Lineage → Stakeholder Enablement |
-| data_scientist_ml | Problem Framing → Data and Feature Engineering → Modeling → Evaluation and Error Analysis → Explainability and Responsible AI → Forecasting and Scenario Analysis → Communication of Results |
-| ml_llm_engineer | LLM Application Architecture → Context Grounding and Retrieval → Agents and Tool Use → Evaluation and Benchmarking → Serving and Deployment → Data Foundations → Reliability and Cost |
-| software_engineer | System Design → Backend and Data Model → Frontend and UX → Security and Auth → Testing and CI/CD → Deployment and Operations → Performance and Reliability |
-| business_analyst | Requirements Elicitation → Process and Gap Analysis → Metrics Definition → Data Analysis → UAT and Acceptance → Stakeholder Communication → Delivery and Adoption |
-| product_analyst | Metrics Definition → Product Analytics → Experimentation and Evaluation → Insight to Roadmap → Dashboards and Self-Service → Stakeholder Communication |
+| data_engineer | Requirements and Source Mapping → Pipeline Design and Architecture → Ingestion and Integration → Distributed Transformation → Data Modeling and Warehousing → Data Quality and Validation → Orchestration and Incremental Loads → CI/CD and Release → Observability and Incident Recovery → Downstream Delivery and Impact |
+| data_analyst_bi | Requirements and KPI Definition → Data Model Design → SQL Analysis and Data Preparation → Semantic Modeling and DAX → Validation and Reconciliation → Dashboard and Self-Service Delivery → Data Governance and Access → Adoption, UAT, and Training → Insight and Decision Impact |
+| analytics_engineer | Source Profiling and Mapping → Model Design → Layered Transformation → Dimensional Modeling → Testing and Reconciliation → Semantic Layer → Release and Orchestration → Documentation and Lineage → Stakeholder Enablement |
+| data_scientist_ml | Problem Framing → Data and Feature Engineering → Modeling → Evaluation and Error Analysis → Explainability and Responsible AI → Forecasting and Scenario Analysis → Deployment and Monitoring → Communication of Results |
+| ml_llm_engineer | Problem Definition → LLM Application Architecture → Context Grounding → Agents and Tool Use → Evaluation and Benchmarking → Serving and Deployment → Data Foundations → Reliability and Cost |
+| software_engineer | Requirements and Scope → System Design → Backend and Data Model → Frontend and UX → Security and Auth → Testing and Validation → CI/CD and Release → Deployment and Operations → Performance and Reliability |
+| business_analyst | Requirements Elicitation → Process and Gap Analysis → Solution Design and Specifications → Metrics Definition → Data Analysis → UAT and Acceptance → Release and Training → Stakeholder Communication → Delivery and Adoption |
+| product_analyst | Metrics Definition → Instrumentation and Data Design → Product Analytics → Experimentation and Evaluation → Dashboards and Self-Service → Insight to Roadmap → Stakeholder Communication |
+
+A role carrying the mandate uses the archetype's arc; a supporting role uses its own discipline's arc (DXC on an LLM role uses the data engineer arc, framed as the data foundations behind AI).
+
+### 3.2c Requirement map and JD wording
+
+The analysis maps 6 to 10 key JD requirements to the role with real evidence (`requirement_map`: requirement, the JD's exact 3 to 8 word phrase, role, evidence). It checks LAMA Desserts first, then Northwest Missouri State, then DXC, and maps to `none` when no role can back it.
+
+- Every mapped requirement appears in its role's bullets.
+- Where the JD's wording truthfully describes the work, the bullet uses the JD's own words, so the hiring manager recognizes their requirement.
+- Mirroring wording never adds a tool, domain, scale, or claim the facts do not support. `none` requirements are never claimed.
+- A tool appears in a role's bullet only if that role's record shows it (no moving Snowflake into LAMA or Supabase into DXC).
 
 ### 3.3 Bullet formation (learned from the reference resume)
 
@@ -143,15 +154,15 @@ Rules:
 
 ### 3.4 Archetype framing guide
 
-| Archetype | Headline | Lead every role with | Projects favored | Skills order |
-|---|---|---|---|---|
-| data_analyst_bi | Data Analyst | KPI ownership, Power BI/DAX models, SQL analysis, stakeholder decisions | TIFA Inventory Analytics, XAI | BI, SQL/Languages, Data Prep, Cloud |
-| data_engineer | Data Engineer | Pipeline design, PySpark/Spark, orchestration, data quality, reliability | Instacart ETL, TIFA (as pipeline) | Languages, Processing, Integration, Warehousing, Cloud |
-| analytics_engineer | Analytics Engineer | dbt-style modeling, star schemas, semantic layers, tested SQL | TIFA, Instacart | SQL/Modeling, Warehousing, BI, Orchestration |
-| data_scientist_ml | Data Scientist | Feature engineering, evaluation, explainability, experiments | XAI, CodeRepoReader | ML, Languages, Data, Cloud |
-| ml_llm_engineer | AI/ML Engineer | LLM apps, agents, SDK benchmarking, evaluation | CodeRepoReader, ApplyForge | LLM/AI, Languages, Backend, Cloud |
-| software_engineer | Software Engineer | Services, APIs, data models, testing, deployment | ApplyForge, TIFA, EdgeCare | Languages, Frameworks, Data, DevOps |
-| business_analyst / product_analyst | Business / Product Analyst | Requirements, metrics definition, analysis, UAT | TIFA, XAI | Analysis, BI, SQL, Tools |
+| Archetype | Headline | Lead every role with | Skills order |
+|---|---|---|---|
+| data_analyst_bi | Data Analyst | KPI ownership, Power BI/DAX models, SQL analysis, stakeholder decisions | BI, SQL/Languages, Data Prep, Cloud |
+| data_engineer | Data Engineer | Pipeline design, PySpark/Spark, orchestration, data quality, reliability | Languages, Processing, Integration, Warehousing, Cloud |
+| analytics_engineer | Analytics Engineer | dbt-style modeling, star schemas, semantic layers, tested SQL | SQL/Modeling, Warehousing, BI, Orchestration |
+| data_scientist_ml | Data Scientist | Feature engineering, evaluation, explainability, experiments | ML, Languages, Data, Cloud |
+| ml_llm_engineer | AI/ML Engineer | LLM apps, agents, SDK benchmarking, evaluation | LLM/AI, Languages, Backend, Cloud |
+| software_engineer | Software Engineer | Services, APIs, data models, testing, deployment | Languages, Frameworks, Data, DevOps |
+| business_analyst / product_analyst | Business / Product Analyst | Requirements, metrics definition, analysis, UAT | Analysis, BI, SQL, Tools |
 
 Analysis-led emphasis always overrides this table when the JD calls for something specific.
 
@@ -172,7 +183,7 @@ Analysis-led emphasis always overrides this table when the JD calls for somethin
 
 Every generated resume passes through:
 
-1. **Deterministic lint** (`api/_lib/lint.js`): banned openers, verb repetition, bullet length, missing labels, em dashes, numbers not in the metrics bank, non-technical skills, duplicate labels, summary length, allocation mismatch, repeated arc stage within a role, and bullets copied from the base profile.
+1. **Deterministic lint** (`api/_lib/lint.js`): banned openers, verb repetition, bullet length, missing labels, em dashes, numbers not in the metrics bank, non-technical skills, duplicate labels, summary length, allocation mismatch, LAMA under 4 bullets, a projects section, repeated arc stage, lifecycle order, tools outside their role's record, JD requirements not visible in their mapped role, and bullets copied from the base profile.
 2. **Critic pass** (LLM): receives the resume, the analysis, and the lint report; rewrites only the failing or weak bullets; checks technical soundness (tool order, believable scale, tool actually capable of the claim) and whether the resume reads as the target archetype.
 3. **Re-lint**, then auto-fix punctuation. Remaining issues are shown in the UI.
 
@@ -202,12 +213,12 @@ Every analysis carries a deterministic term map (`api/_lib/terms.js`) of the JD'
 
 | Class | Meaning | Allowed on resume |
 |---|---|---|
-| matched | in the skill inventory or a project stack | yes; JD core tools must appear |
+| matched | in the skill inventory | yes; JD core tools must appear |
 | bridgeable | same category as a tool he has | stretch mode only, listed for review |
 | history | appears in his work facts but is not a claimed skill (prepared data *for* forecasting; parsed Java files) | only exactly as the facts say; never in Skills |
 | gap | nothing equivalent | never |
 
-Tools in the skill inventory that no fact supports (`unbacked`) may appear in Technical Skills only, never in a bullet. Metrics carry a role tag and may only be used by that role or a project linked to it. Profile reach below 65% shows a low-fit warning.
+Tools in the skill inventory that no experience role supports (`unbacked`, including tools seen only in personal projects) may appear in Technical Skills only, never in a bullet. Metrics carry a role tag and may only be used in that role's bullets. Profile reach below 65% shows a low-fit warning.
 
 ## 6. Honesty controls
 

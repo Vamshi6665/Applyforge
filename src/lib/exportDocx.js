@@ -55,8 +55,8 @@ export async function buildDocx(resume, profile, fontPt = 10.5) {
     kids.push(row(e.company, e.dates, { gap: i > 0 }), row(e.title, e.location), ...e.bullets.map(bullet));
   });
 
-  kids.push(heading("PROJECTS"));
-  resume.projects.forEach((p) => {
+  if (resume.projects?.length) kids.push(heading("PROJECTS"));
+  (resume.projects || []).forEach((p) => {
     kids.push(
       new Paragraph({ ...tight, children: [run(p.name, { bold: true }), run(p.tech?.length ? ` | ${p.tech.join(", ")}` : "", { italics: true })] }),
       ...p.bullets.map(bullet),
@@ -68,14 +68,14 @@ export async function buildDocx(resume, profile, fontPt = 10.5) {
   kids.push(
     new Table({
       width: { size: CONTENT_TWIPS, type: WidthType.DXA },
-      columnWidths: [2300, 8500],
+      columnWidths: [3000, 7800],
       borders: { top: none, bottom: none, left: none, right: none, insideHorizontal: none, insideVertical: none },
       rows: resume.skills.map(
         (s) =>
           new TableRow({
             children: [
-              new TableCell({ width: { size: 2300, type: WidthType.DXA }, children: [new Paragraph({ ...tight, children: [run(s.category, { bold: true })] })] }),
-              new TableCell({ width: { size: 8500, type: WidthType.DXA }, children: [new Paragraph({ ...tight, children: [run(`: ${s.items.join(", ")}`)] })] }),
+              new TableCell({ width: { size: 3000, type: WidthType.DXA }, children: [new Paragraph({ ...tight, children: [run(s.category, { bold: true })] })] }),
+              new TableCell({ width: { size: 7800, type: WidthType.DXA }, children: [new Paragraph({ ...tight, children: [run(`: ${s.items.join(", ")}`)] })] }),
             ],
           }),
       ),

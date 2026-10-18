@@ -16,7 +16,7 @@ const jaccard = (a, b) => {
 };
 
 export const resumeText = (r) =>
-  [r.summary, ...r.experience.flatMap((e) => e.bullets.map((b) => b.text)), ...r.projects.flatMap((p) => [...p.tech, ...p.bullets.map((b) => b.text)]), ...r.skills.flatMap((c) => c.items)].join("\n");
+  [r.summary, ...r.experience.flatMap((e) => e.bullets.map((b) => b.text)), ...r.skills.flatMap((c) => c.items)].join("\n");
 
 export function scoreOne(jd, result, profile) {
   const { analysis, resume, outreach } = result;
@@ -24,7 +24,7 @@ export function scoreOne(jd, result, profile) {
   const a = { ...analysis, term_map: tm };
   const issues = lintResume(resume, profile, { analysis: a });
   const used = new Set(extract(resumeText(resume)).map((t) => t.name));
-  const bullets = [...resume.experience.flatMap((e) => e.bullets), ...resume.projects.flatMap((p) => p.bullets)];
+  const bullets = resume.experience.flatMap((e) => e.bullets);
   const withNum = bullets.filter((b) => /(^|[^A-Za-z0-9-])\d/.test(b.text)).length;
   const firstWords = bullets.map((b) => b.text.split(/\s+/)[0].toLowerCase());
   const alloc = Object.fromEntries((analysis.strategy?.bullet_allocation || []).map((x) => [x.role_id, x.bullets]));
@@ -33,6 +33,8 @@ export function scoreOne(jd, result, profile) {
     return s.length && new Set(s).size === s.length;
   }).length;
 
+  const reqIssues = issues.filter((i) => i.where === "Requirements").length;
+  const mapped = (analysis.requirement_map || []).filter((r) => r.role_id && r.role_id !== "none").length;
   const email = outreach?.emails?.[0]?.body || "";
   const paras = email.split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean);
   const words = resumeText(resume).split(/\s+/).length;
@@ -52,6 +54,10 @@ export function scoreOne(jd, result, profile) {
     metric_density: bullets.length ? withNum / bullets.length : 0,
     verb_diversity: bullets.length ? new Set(firstWords).size / bullets.length : 0,
     arc_distinct: resume.experience.length ? rolesArcOk / resume.experience.length : 0,
+    requirement_coverage: mapped ? (mapped - reqIssues) / mapped : null,
+    lifecycle_ok: !issues.some((i) => /lifecycle order/.test(i.message)),
+    role_evidence_flags: issues.filter((i) => /is not in your .* record/.test(i.message)).length,
+    lama_bullets: resume.experience.find((e) => e.role_id === "lama")?.bullets.length || 0,
     allocation_ok: resume.experience.every((e) => !alloc[e.role_id] || alloc[e.role_id] === e.bullets.length),
     bullets: bullets.length,
     resume_words: words,

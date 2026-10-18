@@ -123,6 +123,7 @@ export const DEFAULT_PROFILE = {
         "Monitored runs with Amazon CloudWatch; alerting, retries, recovery; traced source availability and schema changes in production incidents.",
         "Forecasting and scenario analysis on historical utilization informed capacity recommendations: 25% reduction in storage-related escalations.",
         "Git and Azure DevOps release workflows with code review and automated checks; documented transformation logic and recovery runbooks.",
+        "Optimized SQL queries and shared reporting datasets, simplifying repeated calculations for recurring and ad hoc requests.",
         "Received a Best Employee award.",
       ],
     },

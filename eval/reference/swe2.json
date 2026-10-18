@@ -41,34 +41,74 @@
         {
           "role_id": "lama",
           "bullets": 5,
-          "why": "TIFA is a production full-stack app with auth, schema, migrations, and deployment"
+          "why": "Production full-stack app with auth, schema, migrations, and deployment (US experience)"
         },
         {
           "role_id": "dxc",
-          "bullets": 5,
-          "why": "Production engineering discipline: releases, monitoring, validation"
+          "bullets": 7,
+          "why": "Production engineering discipline: releases, testing, monitoring, access control"
         },
         {
           "role_id": "nwmsu",
           "bullets": 3,
-          "why": "Flask web app and serverless deployment"
-        },
-        {
-          "role_id": "applyforge",
-          "bullets": 3,
-          "why": "React + Node serverless app with unit tests"
-        },
-        {
-          "role_id": "edgecare",
-          "bullets": 2,
-          "why": "Mobile app; thin facts, 2 bullets"
+          "why": "Flask web app, static analyzer, serverless deployment"
         }
       ]
-    }
+    },
+    "requirement_map": [
+      {
+        "requirement": "PostgreSQL tables and migrations",
+        "jd_wording": "Design PostgreSQL tables and write migrations",
+        "role_id": "lama",
+        "evidence": "Supabase PostgreSQL schema; 8 CSV exports migrated"
+      },
+      {
+        "requirement": "Authentication",
+        "jd_wording": "Implement authentication",
+        "role_id": "lama",
+        "evidence": "Supabase Auth; row-level security"
+      },
+      {
+        "requirement": "Web security basics",
+        "jd_wording": "web security basics",
+        "role_id": "lama",
+        "evidence": "Auth sessions and RLS on every table"
+      },
+      {
+        "requirement": "Ship to production on Vercel",
+        "jd_wording": "Ship to production on Vercel",
+        "role_id": "lama",
+        "evidence": "App hosted on Vercel, in daily use"
+      },
+      {
+        "requirement": "Building web applications",
+        "jd_wording": "building web applications",
+        "role_id": "nwmsu",
+        "evidence": "CodeRepoReader Flask web app"
+      },
+      {
+        "requirement": "Role-based access",
+        "jd_wording": "role-based access",
+        "role_id": "none",
+        "evidence": "v1 is single-owner; no roles"
+      },
+      {
+        "requirement": "React and TypeScript",
+        "jd_wording": "React and TypeScript",
+        "role_id": "none",
+        "evidence": "React only in a personal project; no TypeScript"
+      },
+      {
+        "requirement": "Jest tests",
+        "jd_wording": "Write tests with Jest",
+        "role_id": "none",
+        "evidence": "No Jest"
+      }
+    ]
   },
   "resume": {
     "headline": "Software Engineer",
-    "summary": "Software Engineer with 4+ years of experience shipping production applications and data services, from PostgreSQL schemas and authentication to JavaScript and React interfaces deployed on Vercel. Built and operates a live inventory application that replaced 7 paper and spreadsheet logs for a small business. Holds an M.S. in Applied Computer Science and AWS Cloud Practitioner and Azure certifications.",
+    "summary": "Software Engineer with 4+ years of experience shipping production web applications and data services, from PostgreSQL schemas and authentication to JavaScript interfaces deployed on Vercel. Built and operates a live inventory application that replaced 7 paper and spreadsheet logs for a small business. Holds an M.S. in Applied Computer Science and AWS Cloud Practitioner and Azure certifications.",
     "experience": [
       {
         "role_id": "lama",
@@ -80,7 +120,7 @@
           {
             "arc_step": "System Design",
             "label": "Full-Stack Delivery",
-            "text": "Builds and operates a production inventory web app with a JavaScript frontend, a supabase-js data layer, and a Supabase PostgreSQL backend, deployed on Vercel and used daily."
+            "text": "Builds and operates a production inventory web application with a JavaScript frontend, a supabase-js data layer, and a Supabase PostgreSQL backend, shipped to production on Vercel."
           },
           {
             "arc_step": "Backend and Data Model",
@@ -88,19 +128,19 @@
             "text": "Designs PostgreSQL tables with status enums, update triggers, and indexed lookups plus an append-only history table, replacing 7 paper and spreadsheet logs."
           },
           {
-            "arc_step": "Security and Auth",
-            "label": "Access Control",
-            "text": "Secures the application with Supabase Auth email sign-in and row-level security policies on every table, restricting data access to authenticated sessions."
-          },
-          {
             "arc_step": "Frontend and UX",
             "label": "Dashboard Interface",
             "text": "Implements login, dashboard, and migration pages with stat cards, a reorder schedule, per-item history views, and SheetJS Excel export for purchasing workflows."
           },
           {
-            "arc_step": "Deployment and Operations",
-            "label": "Data Migration",
-            "text": "Migrates 8 legacy CSV exports into normalized history rows, parsing free-text thresholds into numeric par levels and routing unparseable values to a review queue."
+            "arc_step": "Security and Auth",
+            "label": "Access Control",
+            "text": "Implements authentication with Supabase Auth and row-level security policies on every table, applying web security basics so data stays limited to signed-in sessions."
+          },
+          {
+            "arc_step": "Testing and Validation",
+            "label": "Data Migrations",
+            "text": "Authors data migrations for 8 legacy CSV exports, validating parsed par levels against source values and routing unparseable rows to a manual-review queue."
           }
         ]
       },
@@ -114,7 +154,7 @@
           {
             "arc_step": "System Design",
             "label": "Web Application",
-            "text": "Built CodeRepoReader AI as a Flask web app with REST endpoints for repository upload or GitHub URL input and conversational Q&A over the analyzed codebase."
+            "text": "Built CodeRepoReader AI, a Flask web application with REST endpoints for repository upload or GitHub URL input and conversational Q&A over the analyzed codebase."
           },
           {
             "arc_step": "Backend and Data Model",
@@ -141,14 +181,24 @@
             "text": "Developed Python and SQL services that consolidated 40+ regional SQL Server sources into shared Snowflake datasets, standardizing business keys across roughly 5 million records."
           },
           {
-            "arc_step": "Testing and CI/CD",
-            "label": "Release Engineering",
-            "text": "Shipped code through Git and Azure DevOps with peer code reviews and automated checks, keeping pipeline code and configuration changes traceable across releases."
+            "arc_step": "Requirements and Scope",
+            "label": "Requirements Scoping",
+            "text": "Translated business reporting requirements into source-to-target mappings, specifications, and acceptance criteria, scoping each service change before implementation began."
           },
           {
-            "arc_step": "Performance and Reliability",
+            "arc_step": "Security and Auth",
+            "label": "Row-Level Security",
+            "text": "Implemented row-level security and scheduled refresh in Power BI so regional stakeholders saw only their own data on dependable, current dashboards."
+          },
+          {
+            "arc_step": "Testing and Validation",
             "label": "Automated Validation",
-            "text": "Automated source-to-target reconciliation checks that caught data defects before release, reducing recurring reporting errors by more than 90% for downstream users."
+            "text": "Automated source-to-target reconciliation tests that caught data defects before release, reducing recurring reporting errors by more than 90% for downstream users."
+          },
+          {
+            "arc_step": "CI/CD and Release",
+            "label": "Release Engineering",
+            "text": "Shipped code through Git and Azure DevOps with peer code reviews and automated checks, keeping pipeline code and configuration changes traceable across releases."
           },
           {
             "arc_step": "Deployment and Operations",
@@ -156,58 +206,9 @@
             "text": "Monitored production jobs with Amazon CloudWatch alerts and retries, tracing root causes in schema changes and source outages, then validated fixes before resuming operation."
           },
           {
-            "arc_step": "Security and Auth",
-            "label": "Row-Level Security",
-            "text": "Implemented row-level security and scheduled refresh in Power BI so regional stakeholders saw only their own data on dependable, current dashboards."
-          }
-        ]
-      }
-    ],
-    "projects": [
-      {
-        "name": "ApplyForge (AI Resume Copilot)",
-        "tech": [
-          "React",
-          "Vite",
-          "Node.js",
-          "OpenAI SDK",
-          "Vercel"
-        ],
-        "bullets": [
-          {
-            "arc_step": "System Design",
-            "label": "Full-Stack Architecture",
-            "text": "Architected a React and Vite frontend over Vercel serverless REST endpoints in Node.js, orchestrating a 4-stage OpenAI pipeline with JSON Schema structured outputs."
-          },
-          {
-            "arc_step": "Testing and CI/CD",
-            "label": "Automated Testing",
-            "text": "Covered lint rules, schema validity, and DOCX export with unit tests on the Node.js test runner, alongside an evaluation harness over 20 labeled job descriptions."
-          },
-          {
-            "arc_step": "Frontend and UX",
-            "label": "Document Export",
-            "text": "Generated one-page DOCX and print-ready PDF resumes in the browser, auto-fitting font size so every tailored resume renders on a single Letter page."
-          }
-        ]
-      },
-      {
-        "name": "EdgeCare Triage",
-        "tech": [
-          "Android",
-          "TensorFlow Lite",
-          "OpenCV"
-        ],
-        "bullets": [
-          {
-            "arc_step": "System Design",
-            "label": "On-Device Inference",
-            "text": "Built an Android app that runs TensorFlow Lite models on device with OpenCV, keeping triage inference available without a network connection."
-          },
-          {
             "arc_step": "Performance and Reliability",
-            "label": "Image Preprocessing",
-            "text": "Integrated OpenCV image preprocessing ahead of TensorFlow Lite inference so camera input reached the model in the format it expected."
+            "label": "Query Optimization",
+            "text": "Optimized SQL queries and shared reporting datasets, replacing repeated calculations with reusable views so recurring and ad hoc requests ran on maintainable logic."
           }
         ]
       }
@@ -256,6 +257,7 @@
       {
         "category": "Testing",
         "items": [
+          "Unit testing",
           "Node.js test runner"
         ]
       }
@@ -267,12 +269,7 @@
       "Microsoft Certified: Power BI Data Analyst Associate (PL-300)"
     ],
     "review_notes": {
-      "stretched_claims": [
-        {
-          "claim": "EdgeCare: OpenCV preprocessing feeding TensorFlow Lite; offline inference",
-          "real_basis": "Project facts only say on-device inference with TensorFlow Lite and OpenCV; confirm details"
-        }
-      ],
+      "stretched_claims": [],
       "suggested_metrics": []
     }
   },
@@ -281,7 +278,7 @@
       {
         "label": "Metrics-forward",
         "subject": "Junior Full-Stack Engineer | production React, Postgres, auth",
-        "body": "Hi Hiring Team,\nGreetings of the day.\n\nI am Vamshi Krishna, a Software Engineer with over four years of experience shipping production applications and data services. I hold a master's degree in Applied Computer Science and am interested in the Junior Full-Stack Engineer position at Mosaic Health Apps.\n\nAt LAMA Desserts, I built and operate a live inventory application with a JavaScript frontend, Supabase Auth, and a PostgreSQL schema secured with row-level security, deployed on Vercel. I also built ApplyForge, a React and Node.js application with serverless APIs and unit tests. At DXC Technology, I shipped production code through Git and Azure DevOps reviews and supported it in operation. This experience aligns with your focus on shipping secure full-stack features from schema to deployment.\n\nI have attached my resume for your consideration. I would welcome the opportunity to learn more about this role and your team, and I look forward to hearing from you regarding the next steps in the hiring process.\n\nBest regards,\nVamshi Krishna Balupari\n+1 (660) 493-5399 | vamshikrishnabalupari@gmail.com\nlinkedin.com/in/vamshikrishnabalupari"
+        "body": "Hi Hiring Team,\nGreetings of the day.\n\nI am Vamshi Krishna, a Software Engineer with over four years of experience shipping production web applications and data services. I hold a master's degree in Applied Computer Science and am interested in the Junior Full-Stack Engineer position at Mosaic Health Apps.\n\nAt LAMA Desserts, I built and operate a live inventory application with a JavaScript frontend, Supabase Auth, and PostgreSQL tables secured with row-level security, shipped to production on Vercel. At DXC Technology, I shipped production code through Git and Azure DevOps reviews, automated validation tests, and supported services in operation. This experience aligns with your focus on designing PostgreSQL tables, implementing authentication, and shipping features to production.\n\nI have attached my resume for your consideration. I would welcome the opportunity to learn more about this role and your team, and I look forward to hearing from you regarding the next steps in the hiring process.\n\nBest regards,\nVamshi Krishna Balupari\n+1 (660) 493-5399 | vamshikrishnabalupari@gmail.com\nlinkedin.com/in/vamshikrishnabalupari"
       }
     ],
     "linkedin": [

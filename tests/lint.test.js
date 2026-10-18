@@ -86,3 +86,28 @@ test("a metric cannot be claimed by a role that does not own it", () => {
   ok.experience[1].bullets[2].text = "Benchmarked 2 agent SDKs across 3 LLMs on context handling, tool integration, and response quality, contributing results to a co-authored research paper.";
   assert.deepEqual(errors(ok), []);
 });
+
+test("v2.3 structure: LAMA needs 4+, no projects, tools stay in their own role", () => {
+  const r = structuredClone(GOOD_RESUME);
+  r.experience[0].bullets = r.experience[0].bullets.slice(0, 3);
+  r.projects = [{ name: "X", tech: [], bullets: [] }];
+  r.experience[0].bullets[0].text = "Engineers Snowflake ingestion for a small-business inventory platform, loading sales and vendor records into curated tables for owner purchasing decisions.";
+  const all = lintResume(r, DEFAULT_PROFILE).map((i) => i.message).join(" | ");
+  assert.match(all, /LAMA Desserts always needs at least 4/);
+  assert.match(all, /no Projects section/);
+  assert.match(all, /"Snowflake" is not in your LAMA Desserts LLC record/);
+});
+
+test("lifecycle order and JD requirement coverage are checked", () => {
+  const r = structuredClone(GOOD_RESUME);
+  const steps = ["Downstream Delivery and Impact", "CI/CD and Release", "Ingestion and Integration", "Data Quality and Validation", "Data Modeling and Warehousing", "Observability and Incident Recovery", "Requirements and Source Mapping", "Orchestration and Incremental Loads"];
+  r.experience[2].bullets.forEach((b, i) => (b.arc_step = steps[i]));
+  const analysis = { requirement_map: [
+    { requirement: "x", jd_wording: "own on-call for failed loads", role_id: "dxc", evidence: "" },
+    { requirement: "y", jd_wording: "source-to-target reconciliation", role_id: "dxc", evidence: "" },
+  ] };
+  const msgs = lintResume(r, DEFAULT_PROFILE, { analysis }).map((i) => i.message).join(" | ");
+  assert.match(msgs, /lifecycle order/);
+  assert.match(msgs, /"own on-call for failed loads" is mapped to DXC Technology but not visible/);
+  assert.doesNotMatch(msgs, /source-to-target reconciliation" is mapped/);
+});

@@ -85,8 +85,9 @@ export default function ResumeDoc({ resume, profile, editable = false, onChange 
           </div>
         ))}
 
-        <h2 className="rd-h">PROJECTS</h2>
-        {resume.projects.map((p, pi) => (
+        {/* legacy: only runs saved before v2.3 carry a projects section */}
+        {resume.projects?.length > 0 && <h2 className="rd-h">PROJECTS</h2>}
+        {(resume.projects || []).map((p, pi) => (
           <div className="rd-block" key={pi}>
             <div className="rd-row"><span><b>{p.name}</b>{p.tech?.length ? <i> | {p.tech.join(", ")}</i> : null}</span></div>
             <Bullets items={p.bullets} editable={editable} onEdit={(i, b) => set((r) => (r.projects[pi].bullets[i] = b))} />
@@ -129,8 +130,8 @@ export function resumeToText(resume, profile) {
     e.bullets.forEach((b) => L.push(`• ${b.label}: ${b.text}`));
     L.push("");
   });
-  L.push("PROJECTS");
-  resume.projects.forEach((p) => {
+  if (resume.projects?.length) L.push("PROJECTS");
+  (resume.projects || []).forEach((p) => {
     L.push(`${p.name} | ${p.tech.join(", ")}`);
     p.bullets.forEach((b) => L.push(`• ${b.label}: ${b.text}`));
   });

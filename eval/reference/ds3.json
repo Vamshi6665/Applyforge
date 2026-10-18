@@ -39,36 +39,70 @@
       "headline": "AI/ML Engineer",
       "bullet_allocation": [
         {
-          "role_id": "nwmsu",
-          "bullets": 5,
-          "why": "CodeRepoReader is the closest proof of grounded LLM apps, agents, and SDK evaluation"
-        },
-        {
           "role_id": "dxc",
-          "bullets": 5,
+          "bullets": 7,
           "why": "Data foundations and production reliability behind AI systems"
         },
         {
           "role_id": "lama",
-          "bullets": 3,
-          "why": "End-to-end delivery of a production application"
+          "bullets": 4,
+          "why": "End-to-end delivery of a production application (US experience)"
         },
         {
-          "role_id": "applyforge",
-          "bullets": 3,
-          "why": "Structured outputs, guardrails, and an evaluation harness map directly to the role"
-        },
-        {
-          "role_id": "xai",
-          "bullets": 2,
-          "why": "Model trust and evaluation"
+          "role_id": "nwmsu",
+          "bullets": 4,
+          "why": "CodeRepoReader: grounded LLM app, agents, SDK evaluation, API deployment"
         }
       ]
-    }
+    },
+    "requirement_map": [
+      {
+        "requirement": "Tool-calling agents",
+        "jd_wording": "tool-calling agents",
+        "role_id": "nwmsu",
+        "evidence": "Copilot SDK agent; benchmarked tool integration"
+      },
+      {
+        "requirement": "Evaluate LLM output quality",
+        "jd_wording": "evaluation of LLM outputs",
+        "role_id": "nwmsu",
+        "evidence": "SDK benchmark on context handling, tool integration, response quality"
+      },
+      {
+        "requirement": "Deploy LLM services as APIs",
+        "jd_wording": "Deploy LLM services as APIs",
+        "role_id": "nwmsu",
+        "evidence": "Flask REST service on Vercel serverless"
+      },
+      {
+        "requirement": "OpenAI API",
+        "jd_wording": "OpenAI API",
+        "role_id": "nwmsu",
+        "evidence": "Ported CodeRepoReader to the OpenAI SDK"
+      },
+      {
+        "requirement": "Grounded LLM features",
+        "jd_wording": "LLM features grounded",
+        "role_id": "nwmsu",
+        "evidence": "Answers grounded in static analysis of code (not documents)"
+      },
+      {
+        "requirement": "RAG pipelines",
+        "jd_wording": "retrieval-augmented generation (RAG) pipelines",
+        "role_id": "none",
+        "evidence": "No RAG work in the profile"
+      },
+      {
+        "requirement": "Vector databases",
+        "jd_wording": "Manage vector databases",
+        "role_id": "none",
+        "evidence": "No vector database work"
+      }
+    ]
   },
   "resume": {
     "headline": "AI/ML Engineer",
-    "summary": "AI/ML Engineer with 4+ years of experience across data engineering and applied AI, building LLM applications with structured outputs, tool-using agents, and evaluation harnesses on the OpenAI SDK. Built a repository-aware assistant grounding 3 LLMs in static code analysis and benchmarked 2 agent SDKs for a co-authored paper. Holds an M.S. in Applied Computer Science and DP-203 and AWS Cloud Practitioner certifications.",
+    "summary": "AI/ML Engineer with 4+ years of experience across data engineering and applied AI, building grounded LLM applications, agent workflows, and model evaluation on the OpenAI SDK. Built a repository-aware assistant grounding 3 LLMs in static code analysis and benchmarked 2 agent SDKs for a co-authored paper. Holds an M.S. in Applied Computer Science and DP-203 and AWS Cloud Practitioner certifications.",
     "experience": [
       {
         "role_id": "lama",
@@ -85,7 +119,12 @@
           {
             "arc_step": "Backend and Data Model",
             "label": "Data Modeling",
-            "text": "Models append-only count history with triggers, indexes, and row-level security, replacing 7 paper and spreadsheet logs with one authenticated source of record."
+            "text": "Models append-only count history with update triggers and indexed lookups, replacing 7 paper and spreadsheet logs with one structured source of record."
+          },
+          {
+            "arc_step": "Security and Auth",
+            "label": "Access Control",
+            "text": "Secures every table with Supabase Auth sessions and row-level security policies, restricting inventory and vendor data to authenticated access only."
           },
           {
             "arc_step": "Performance and Reliability",
@@ -104,27 +143,22 @@
           {
             "arc_step": "LLM Application Architecture",
             "label": "Codebase Assistant",
-            "text": "Architected CodeRepoReader AI, a repository-aware assistant that accepts uploads or GitHub URLs, analyzes project structure, and answers developer questions with GPT-4o, GPT-4o Mini, and Llama 3.1 70B."
+            "text": "Architected CodeRepoReader AI, a repository-aware assistant deployed as a Flask service on Vercel serverless functions, answering developer questions with GPT-4o and Llama 3.1 70B through the OpenAI API."
           },
           {
-            "arc_step": "Context Grounding and Retrieval",
+            "arc_step": "Context Grounding",
             "label": "Context Grounding",
-            "text": "Grounded model answers in static analysis, parsing 4 languages with Python AST and regex to extract classes, functions, dependencies, and entry points as structured context."
+            "text": "Grounded LLM features in static analysis, parsing 4 languages with Python AST and regex to extract classes, functions, dependencies, and entry points as structured context."
           },
           {
             "arc_step": "Agents and Tool Use",
             "label": "Agent Workflows",
-            "text": "Built an event-driven CLI agent on the GitHub Copilot SDK with streaming sessions that clones repositories, collects key files, and generates beginner-friendly codebase summaries."
+            "text": "Built a CLI agent on the GitHub Copilot SDK with event-driven streaming sessions that clones repositories, collects key files, and generates codebase summaries."
           },
           {
             "arc_step": "Evaluation and Benchmarking",
-            "label": "SDK Benchmarking",
-            "text": "Benchmarked 2 agent SDKs on context handling, tool integration, and response quality, and co-authored the comparative research paper on the results."
-          },
-          {
-            "arc_step": "Serving and Deployment",
-            "label": "Serverless Deployment",
-            "text": "Ported the Flask service to the OpenAI SDK and deployed it on Vercel serverless functions, adding a per-session analysis cache so follow-up questions skip repeated scans."
+            "label": "SDK Evaluation",
+            "text": "Benchmarked 2 agent SDKs by comparing LLM outputs on context handling, tool integration, and response quality, and co-authored the comparative research paper."
           }
         ]
       },
@@ -141,14 +175,24 @@
             "text": "Engineered Azure Data Factory and Databricks PySpark pipelines consolidating 40+ regional SQL Server sources into Snowflake datasets covering roughly 5 million records for analytics."
           },
           {
+            "arc_step": "Distributed Transformation",
+            "label": "Telemetry Standardization",
+            "text": "Standardized device identifiers, timestamps, and capacity units with PySpark across raw, validated, and curated S3 layers, producing consistent inputs for downstream analysis."
+          },
+          {
             "arc_step": "Data Quality and Validation",
             "label": "Reconciliation Automation",
             "text": "Automated source-to-target validation and reconciliation between raw and curated layers, reducing recurring reporting errors by more than 90% across published datasets."
           },
           {
-            "arc_step": "Distributed Transformation",
-            "label": "Telemetry Standardization",
-            "text": "Standardized device identifiers, timestamps, and capacity units with PySpark across raw, validated, and curated S3 layers, producing consistent inputs for forecasting and analysis."
+            "arc_step": "Orchestration and Incremental Loads",
+            "label": "Incremental Processing",
+            "text": "Orchestrated incremental loads and controlled backfills over partitioned Parquet on Amazon S3 with AWS Glue, absorbing corrected records without rebuilding full history."
+          },
+          {
+            "arc_step": "CI/CD and Release",
+            "label": "Release Workflow",
+            "text": "Shipped pipeline changes through Git and Azure DevOps with code reviews and automated checks, keeping transformation code and configurations traceable across releases."
           },
           {
             "arc_step": "Observability and Incident Recovery",
@@ -156,58 +200,9 @@
             "text": "Monitored pipeline runs with Amazon CloudWatch alerts and retries, tracing schema changes and source outages to restore affected deliveries with validated outputs."
           },
           {
-            "arc_step": "Downstream Delivery",
+            "arc_step": "Downstream Delivery and Impact",
             "label": "Forecasting Datasets",
             "text": "Prepared historical utilization datasets for forecasting and scenario analysis, informing capacity recommendations that reduced storage-related escalations by 25%."
-          }
-        ]
-      }
-    ],
-    "projects": [
-      {
-        "name": "ApplyForge (AI Resume Copilot)",
-        "tech": [
-          "OpenAI SDK",
-          "Node.js",
-          "React",
-          "JSON Schema"
-        ],
-        "bullets": [
-          {
-            "arc_step": "LLM Application Architecture",
-            "label": "Structured Generation",
-            "text": "Designed a 4-stage LLM pipeline on the OpenAI SDK with JSON Schema structured outputs for role analysis, resume generation, critic review, and outreach."
-          },
-          {
-            "arc_step": "Reliability and Cost",
-            "label": "Output Guardrails",
-            "text": "Enforced deterministic quality gates that reject unsupported numbers, metrics claimed by the wrong role, and tools without evidence, keeping generated claims traceable to source facts."
-          },
-          {
-            "arc_step": "Evaluation and Benchmarking",
-            "label": "LLM Evaluation",
-            "text": "Evaluated outputs across 20 labeled job descriptions with automated metrics and an LLM recruiter-judge rubric scoring role fit, technical soundness, and honesty."
-          }
-        ]
-      },
-      {
-        "name": "Explainable ML Pipeline (SHAP and Anchor)",
-        "tech": [
-          "Python",
-          "scikit-learn",
-          "SHAP",
-          "Anchor"
-        ],
-        "bullets": [
-          {
-            "arc_step": "Evaluation and Benchmarking",
-            "label": "Model Explainability",
-            "text": "Combined SHAP feature attributions with Anchor rule-based explanations to show both the global drivers and the local decision rules behind each model prediction."
-          },
-          {
-            "arc_step": "Reliability and Cost",
-            "label": "AI Governance",
-            "text": "Documented model behavior and limitations against NIST AI RMF, giving technical and nontechnical reviewers a consistent basis for trusting model outputs."
           }
         ]
       }
@@ -239,10 +234,10 @@
         "items": [
           "Flask",
           "REST APIs",
-          "Node.js",
-          "React",
+          "Vercel Serverless Functions",
           "JSON Schema",
-          "Vercel Serverless Functions"
+          "React",
+          "Node.js"
         ]
       },
       {
@@ -287,7 +282,7 @@
       {
         "label": "Metrics-forward",
         "subject": "Generative AI Engineer | grounded LLM apps and evaluation",
-        "body": "Hi Hiring Team,\nGreetings of the day.\n\nI am Vamshi Krishna, an AI/ML Engineer with over four years of experience across data engineering and applied AI, building LLM applications with structured outputs and evaluation harnesses. I hold a master's degree in Applied Computer Science and am interested in the Generative AI Engineer position at Clearwater Legal Tech.\n\nAt Northwest Missouri State University, I built CodeRepoReader AI, which grounds GPT-4o and Llama answers in static code analysis, and benchmarked 2 agent SDKs for a co-authored paper. I also built ApplyForge, a 4-stage OpenAI pipeline with JSON Schema outputs, guardrails, and an evaluation suite over 20 labeled inputs. Before that, I spent three years at DXC Technology building the data pipelines these systems depend on. This experience aligns with your focus on grounded LLM features and rigorous evaluation of accuracy and groundedness.\n\nI have attached my resume for your consideration. I would welcome the opportunity to learn more about this role and your team, and I look forward to hearing from you regarding the next steps in the hiring process.\n\nBest regards,\nVamshi Krishna Balupari\n+1 (660) 493-5399 | vamshikrishnabalupari@gmail.com\nlinkedin.com/in/vamshikrishnabalupari"
+        "body": "Hi Hiring Team,\nGreetings of the day.\n\nI am Vamshi Krishna, an AI/ML Engineer with over four years of experience across data engineering and applied AI, building grounded LLM applications and evaluating model outputs. I hold a master's degree in Applied Computer Science and am interested in the Generative AI Engineer position at Clearwater Legal Tech.\n\nAt Northwest Missouri State University, I built CodeRepoReader AI, which grounds GPT-4o and Llama answers in static code analysis and runs as a Flask service through the OpenAI API, and I benchmarked 2 agent SDKs for a co-authored paper. Before that, I spent three years at DXC Technology building the data pipelines these systems depend on. This experience aligns with your focus on grounded LLM features and rigorous evaluation of LLM outputs.\n\nI have attached my resume for your consideration. I would welcome the opportunity to learn more about this role and your team, and I look forward to hearing from you regarding the next steps in the hiring process.\n\nBest regards,\nVamshi Krishna Balupari\n+1 (660) 493-5399 | vamshikrishnabalupari@gmail.com\nlinkedin.com/in/vamshikrishnabalupari"
       }
     ],
     "linkedin": [

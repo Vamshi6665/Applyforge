@@ -46,11 +46,14 @@ export const analysisSchema = {
       bridgeable: { type: "array", items: obj({ item: str, bridge: str }) },
       true_gaps: strArr,
     }),
+    requirement_map: {
+      type: "array",
+      items: obj({ requirement: str, jd_wording: str, role_id: { type: "string", enum: ["lama", "nwmsu", "dxc", "none"] }, evidence: str }),
+    },
     strategy: obj({
       headline: str,
       summary_angle: str,
       role_emphasis: { type: "array", items: obj({ role_id: str, lead_with: str, frame_in_stack: strArr }) },
-      projects: { type: "array", items: obj({ project_id: str, why: str }) },
       skill_category_order: strArr,
       bullet_allocation: { type: "array", items: obj({ role_id: str, bullets: { type: "integer" }, why: str }) },
     }),
@@ -76,10 +79,6 @@ export const resumeSchema = {
         dates: str,
         bullets: { type: "array", items: bullet },
       }),
-    },
-    projects: {
-      type: "array",
-      items: obj({ name: str, tech: strArr, bullets: { type: "array", items: bullet } }),
     },
     skills: { type: "array", items: obj({ category: str, items: strArr }) },
     certifications: strArr,

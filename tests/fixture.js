@@ -9,6 +9,7 @@ export const GOOD_RESUME = {
         { label: "Inventory Data Platform", text: "Engineers a Supabase PostgreSQL inventory platform with append-only count history, indexed lookups, and row-level security, replacing 7 paper and spreadsheet logs with a single governed source." },
         { label: "Historical Migration", text: "Migrates 8 CSV exports with Python and Pandas, converting wide count columns into dated history rows and parsing free-text thresholds into numeric par levels for reorder logic." },
         { label: "Reorder Analytics", text: "Models reusable SQL views joining transactions, products, vendors, and snapshots, feeding Power BI DAX measures that flag items below par and surface slow-moving stock for purchasing." },
+        { label: "Review Automation", text: "Automates weekly and monthly data preparation with repeatable Python and SQL jobs so owner business reviews run on current inventory and sales data." },
       ],
     },
     {
@@ -27,23 +28,9 @@ export const GOOD_RESUME = {
         { label: "Dimensional Modeling", text: "Modeled fact tables, conformed dimensions, and star schemas with standardized business keys, giving regional teams consistent definitions for cross-region workload and processing-time analysis." },
         { label: "Lakehouse Layering", text: "Architected raw, validated, and curated layers on Amazon S3 with AWS Glue and partitioned Parquet, enabling incremental loads and controlled backfills queried through Amazon Athena." },
         { label: "Production Reliability", text: "Instrumented pipeline runs with Amazon CloudWatch alerts and retries, tracing schema changes and source outages to restore affected reporting deliveries with validated outputs." },
+        { label: "Release Workflow", text: "Shipped pipeline changes through Git and Azure DevOps with code reviews and automated checks, keeping transformation logic and configurations traceable across releases." },
+        { label: "Requirements Mapping", text: "Translated reporting requirements into source-to-target mappings, transformation specifications, and acceptance criteria that aligned pipeline builds with operational priorities." },
         { label: "Capacity Forecasting", text: "Orchestrated daily utilization feeds from ADLS through Databricks into Snowflake history tables, powering an 80% threshold dashboard that cut storage-related escalations by 25%." },
-      ],
-    },
-  ],
-  projects: [
-    {
-      name: "Instacart Market Basket ETL Pipeline", tech: ["PySpark", "Apache Airflow", "Parquet"],
-      bullets: [
-        { label: "Batch Orchestration", text: "Orchestrated PySpark batch transformations over the public Instacart orders dataset with Apache Airflow DAGs, producing partitioned Parquet tables ready for basket analysis." },
-        { label: "Data Quality Gates", text: "Embedded schema and row-count validation tasks between Airflow stages so malformed extracts halt downstream loads instead of propagating into analytical tables." },
-      ],
-    },
-    {
-      name: "CodeRepoReader AI", tech: ["Python", "OpenAI SDK", "AST", "Flask"],
-      bullets: [
-        { label: "Repository Analysis", text: "Built a Python AST static analyzer extracting classes, functions, dependencies, and entry points to ground GPT-4o answers about unfamiliar codebases in actual structure." },
-        { label: "Serverless Deployment", text: "Ported the Flask application to the OpenAI SDK and deployed it on Vercel serverless functions with a per-session analysis cache to avoid repeated repository scans." },
       ],
     },
   ],

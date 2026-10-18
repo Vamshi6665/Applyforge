@@ -41,7 +41,7 @@
         {
           "role_id": "dxc",
           "bullets": 7,
-          "why": "Strongest proof of warehouse ingestion, testing, and on-call recovery"
+          "why": "Strongest proof of warehouse ingestion, tested modeling, and failure recovery"
         },
         {
           "role_id": "lama",
@@ -52,19 +52,59 @@
           "role_id": "nwmsu",
           "bullets": 3,
           "why": "Supporting proof of reproducible data preparation"
-        },
-        {
-          "role_id": "instacart",
-          "bullets": 2,
-          "why": "Only project with Airflow orchestration"
-        },
-        {
-          "role_id": "applyforge",
-          "bullets": 2,
-          "why": "Shows tested, schema-validated pipeline design"
         }
       ]
-    }
+    },
+    "requirement_map": [
+      {
+        "requirement": "Build and maintain Python ingestion jobs",
+        "jd_wording": "Python ingestion jobs",
+        "role_id": "lama",
+        "evidence": "Python and Pandas loading of sales, inventory, product, and vendor CSVs into PostgreSQL"
+      },
+      {
+        "requirement": "Own pipelines end to end",
+        "jd_wording": "owning pipelines end to end",
+        "role_id": "lama",
+        "evidence": "Sole data owner of the LAMA platform"
+      },
+      {
+        "requirement": "Tables answer business questions",
+        "jd_wording": "tables answer their questions",
+        "role_id": "lama",
+        "evidence": "SQL views feeding owner purchasing reports"
+      },
+      {
+        "requirement": "Orchestrate scheduled loads",
+        "jd_wording": "Orchestrate daily and hourly loads",
+        "role_id": "dxc",
+        "evidence": "ADF scheduled daily loads, incremental processing"
+      },
+      {
+        "requirement": "Monitor failures",
+        "jd_wording": "monitor failures",
+        "role_id": "dxc",
+        "evidence": "CloudWatch monitoring, failed-run investigation and recovery"
+      },
+      {
+        "requirement": "Clean, tested models",
+        "jd_wording": "clean, tested tables",
+        "role_id": "dxc",
+        "evidence": "Star schemas plus automated reconciliation tests"
+      },
+      {
+        "requirement": "Cloud data warehouse",
+        "jd_wording": "Cloud data warehouse experience",
+        "role_id": "dxc",
+        "evidence": "Snowflake datasets"
+      },
+      {
+        "requirement": "dbt modeling",
+        "jd_wording": "dbt experience strongly preferred",
+        "role_id": "none",
+        "evidence": "dbt is in his skill list but no work record shows it"
+      }
+    ]
   },
   "resume": {
     "headline": "Data Engineer",
@@ -80,7 +120,7 @@
           {
             "arc_step": "Ingestion and Integration",
             "label": "Pipeline Ownership",
-            "text": "Owns end-to-end ingestion for a small-business data platform, loading sales, inventory, product, and vendor records from CSV and spreadsheet sources into PostgreSQL with Python and Pandas."
+            "text": "Owns pipelines end to end for a small business, building and maintaining Python ingestion jobs that load sales, inventory, product, and vendor CSVs into PostgreSQL with Pandas."
           },
           {
             "arc_step": "Data Modeling and Warehousing",
@@ -98,9 +138,9 @@
             "text": "Automates weekly and monthly data preparation with repeatable Python and SQL jobs, so business reviews run on current data without manual spreadsheet consolidation."
           },
           {
-            "arc_step": "Downstream Delivery",
+            "arc_step": "Downstream Delivery and Impact",
             "label": "Analytics Serving",
-            "text": "Exposes reusable SQL views joining transactions, products, vendors, and inventory snapshots to Power BI, giving owners reorder and slow-moving-stock reporting for purchasing."
+            "text": "Exposes reusable SQL views joining transactions, products, vendors, and inventory snapshots to Power BI, so tables answer the owners' purchasing questions directly."
           }
         ]
       },
@@ -122,7 +162,7 @@
             "text": "Built validated experiment datasets with Python, Pandas, and SQL, standardizing preprocessing and feature generation so model comparisons reran identically across experiments."
           },
           {
-            "arc_step": "Downstream Delivery",
+            "arc_step": "Downstream Delivery and Impact",
             "label": "Benchmark Reporting",
             "text": "Benchmarked 2 agent SDKs across 3 LLMs on context handling, tool integration, and response quality, publishing the comparison in a co-authored research paper."
           }
@@ -143,7 +183,7 @@
           {
             "arc_step": "Data Modeling and Warehousing",
             "label": "Dimensional Modeling",
-            "text": "Modeled fact tables, conformed dimensions, and star schemas with standardized business keys, giving reporting teams consistent definitions for cross-region workload analysis."
+            "text": "Modeled raw regional data into clean, tested fact tables, conformed dimensions, and star schemas with standardized business keys for consistent cross-region analysis."
           },
           {
             "arc_step": "Data Quality and Validation",
@@ -153,12 +193,7 @@
           {
             "arc_step": "Orchestration and Incremental Loads",
             "label": "Incremental Processing",
-            "text": "Orchestrated incremental loads and controlled backfills over partitioned Parquet on Amazon S3 with AWS Glue, absorbing corrected measurements without rebuilding full history."
-          },
-          {
-            "arc_step": "Observability and Incident Recovery",
-            "label": "Failure Recovery",
-            "text": "Monitored daily pipeline runs with Amazon CloudWatch alerts and retries, tracing schema changes and source outages to restore failed loads and validate corrected outputs."
+            "text": "Orchestrated daily incremental loads and controlled backfills over partitioned Parquet on Amazon S3 with AWS Glue, absorbing corrected records without rebuilding full history."
           },
           {
             "arc_step": "CI/CD and Release",
@@ -166,50 +201,14 @@
             "text": "Shipped pipeline changes through Git and Azure DevOps with code reviews and automated checks, keeping transformation logic and configurations traceable across releases."
           },
           {
-            "arc_step": "Downstream Delivery",
+            "arc_step": "Observability and Incident Recovery",
+            "label": "Failure Recovery",
+            "text": "Monitored pipeline failures with Amazon CloudWatch alerts and retries, tracing schema changes and source outages to restore failed loads and validate corrected outputs."
+          },
+          {
+            "arc_step": "Downstream Delivery and Impact",
             "label": "Capacity Analytics",
             "text": "Delivered curated utilization history from Databricks into Snowflake for an 80% threshold dashboard, enabling proactive upgrades that cut storage-related escalations by 25%."
-          }
-        ]
-      }
-    ],
-    "projects": [
-      {
-        "name": "Instacart Market Basket ETL Pipeline",
-        "tech": [
-          "PySpark",
-          "Apache Airflow"
-        ],
-        "bullets": [
-          {
-            "arc_step": "Orchestration and Incremental Loads",
-            "label": "Batch Orchestration",
-            "text": "Orchestrated PySpark batch transformations over the public Instacart orders dataset with Apache Airflow DAGs, producing analysis-ready tables for basket and reorder analysis."
-          },
-          {
-            "arc_step": "Data Modeling and Warehousing",
-            "label": "Table Modeling",
-            "text": "Modeled order, product, and department data into Parquet tables with Spark SQL so reorder-rate and basket-size queries ran without reprocessing raw CSV files."
-          }
-        ]
-      },
-      {
-        "name": "ApplyForge (AI Resume Copilot)",
-        "tech": [
-          "Node.js",
-          "OpenAI SDK",
-          "JSON Schema"
-        ],
-        "bullets": [
-          {
-            "arc_step": "Data Quality and Validation",
-            "label": "Quality Gates",
-            "text": "Architected a 4-stage LLM pipeline with JSON Schema structured outputs and deterministic lint gates that reject unsupported numbers, weak verbs, and unbacked claims before delivery."
-          },
-          {
-            "arc_step": "Downstream Delivery",
-            "label": "Evaluation Harness",
-            "text": "Evaluated pipeline output across 20 labeled job descriptions with automated metrics for classification accuracy, tool recall, and unsupported claims, plus an LLM recruiter-judge rubric."
           }
         ]
       }
@@ -281,18 +280,8 @@
       "Microsoft Certified: Azure Fundamentals (AZ-900)"
     ],
     "review_notes": {
-      "stretched_claims": [
-        {
-          "claim": "Instacart: Spark SQL table modeling for reorder-rate and basket-size queries",
-          "real_basis": "Project facts only say PySpark + Airflow into analysis-ready tables; confirm the table design before sending"
-        }
-      ],
-      "suggested_metrics": [
-        {
-          "where": "Instacart project",
-          "metric_idea": "Rows or orders processed per run (the public dataset has a known size)"
-        }
-      ]
+      "stretched_claims": [],
+      "suggested_metrics": []
     }
   },
   "outreach": {

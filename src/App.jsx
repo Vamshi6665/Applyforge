@@ -291,7 +291,7 @@ function Analysis({ a }) {
       <div className="acols">
         <Box title={`Headline: ${a.strategy.headline}`}>{a.strategy.summary_angle}</Box>
         <Box title="Role emphasis"><ul>{a.strategy.role_emphasis.map((x, i) => <li key={i}><b>{x.role_id.toUpperCase()}</b>: {x.lead_with} <span className="muted">({x.frame_in_stack.join(", ")})</span></li>)}</ul></Box>
-        <Box title="Projects chosen"><ul>{a.strategy.projects.map((x, i) => <li key={i}><b>{x.project_id}</b>: {x.why}</li>)}</ul></Box>
+        <Box title="JD requirement → where it shows on your resume"><ul>{(a.requirement_map || []).map((x, i) => <li key={i}><b>{x.role_id === "none" ? "Not claimed" : x.role_id.toUpperCase()}</b>: "{x.jd_wording}" <span className="muted">{x.evidence}</span></li>)}</ul></Box>
         <Box title="Bullet allocation"><ul>{(a.strategy.bullet_allocation || []).map((x, i) => <li key={i}><b>{x.role_id.toUpperCase()}: {x.bullets}</b> <span className="muted">{x.why}</span></li>)}</ul></Box>
         <Box title="Skills order">{a.strategy.skill_category_order.join("  ›  ")}</Box>
       </div>
